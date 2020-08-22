@@ -13,7 +13,7 @@ class CollectionPhotoViewHolder(inflater: LayoutInflater, parent: ViewGroup): Re
         itemView.description.text = photoVo.description ?: ""
 
         photoVo.smallUrl?.let { it ->
-            itemView.image.loadPhoto(it)
+            itemView.image.loadPhoto(it, photoVo.color)
         }
     }
 }

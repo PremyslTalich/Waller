@@ -41,10 +41,10 @@ class CollectionDetailFragment : Fragment(R.layout.fragment_collection_detail), 
             binding.coverPhoto.loadPhoto(it)
         }
 
-//        binding.photos.apply {
-//            layoutManager = LinearLayoutManager(view.context)
-//            adapter = photosAdapter
-//        }
+        binding.photos.apply {
+            layoutManager = LinearLayoutManager(view.context)
+            adapter = photosAdapter
+        }
 
         observeCollectionPhotos()
 
@@ -53,9 +53,9 @@ class CollectionDetailFragment : Fragment(R.layout.fragment_collection_detail), 
 
     private fun observeCollectionPhotos() {
         lifecycleScope.launch {
-//            viewModel.photos.collect { value ->
-//                photosAdapter.addPhotos(value)
-//            }
+            viewModel.photos.collect { value ->
+                photosAdapter.addPhotos(value)
+            }
         }
     }
 

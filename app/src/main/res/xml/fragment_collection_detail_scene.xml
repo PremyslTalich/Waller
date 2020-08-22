@@ -5,10 +5,10 @@
     <Transition
         motion:constraintSetStart="@+id/start"
         motion:constraintSetEnd="@+id/end"
-        motion:duration="1000" >
+        motion:motionInterpolator="linear"
+        motion:duration="100" >
         <OnSwipe
             motion:touchAnchorId="@+id/photos"
-            motion:touchRegionId="@id/photos"
             motion:touchAnchorSide="top"
             motion:motionInterpolator="easeInOut"
             motion:dragDirection="dragUp" />
@@ -21,6 +21,7 @@
             <Layout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
                 motion:layout_constraintEnd_toEndOf="parent"
                 motion:layout_constraintTop_toTopOf="parent"
                 motion:layout_constraintStart_toStartOf="parent"
@@ -54,12 +55,13 @@
             <Layout
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_marginTop="-50dp"
                 motion:layout_constraintEnd_toEndOf="parent"
-                motion:layout_constraintTop_toTopOf="parent"
                 motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintBottom_toTopOf="parent"
                 />
             <Transform
-                android:rotationX="-90"
+                android:rotationX="-45"
                 />
         </Constraint>
         <Constraint

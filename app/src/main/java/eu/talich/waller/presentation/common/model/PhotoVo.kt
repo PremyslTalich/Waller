@@ -5,6 +5,7 @@ data class PhotoVo(
     val description: String?,
     val width: Int,
     val height: Int,
+    val color: String,
     val smallUrl: String?,
     val downloadUrl: String?
 )

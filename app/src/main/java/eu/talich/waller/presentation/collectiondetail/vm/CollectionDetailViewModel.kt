@@ -35,9 +35,15 @@ class CollectionDetailViewModel(
         page++
 
         launch(Dispatchers.IO) {
-            _photos.value = getCollectionPhotosUseCase(collection.id, page).map {
+            val photos = getCollectionPhotosUseCase(collection.id, page).map {
                 photoMapper.map(it)
+            }.toMutableList()
+
+            if (page == 1) {
+                photos.removeFirst()
             }
+
+            _photos.value = photos
         }
     }
 

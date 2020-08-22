@@ -13,6 +13,7 @@ class PhotoMapper:
             from.description,
             from.width,
             from.height,
+            from.color,
             PhotoUrls(
                 from.urls?.raw,
                 from.urls?.full,

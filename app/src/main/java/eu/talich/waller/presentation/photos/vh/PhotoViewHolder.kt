@@ -13,7 +13,7 @@ class PhotoViewHolder(inflater: LayoutInflater, parent: ViewGroup): RecyclerView
         itemView.description.text = photoVo.description ?: ""
 
         photoVo.smallUrl?.let { it ->
-            itemView.image.loadPhoto(it)
+            itemView.image.loadPhoto(it, photoVo.color)
         }
     }
 }

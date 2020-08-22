@@ -11,6 +11,7 @@ class PhotoMapper: Mapper<Photo, PhotoVo> {
             from.description,
             from.width,
             from.height,
+            from.color,
             from.urls?.small,
             from.urls?.regular
         )
