@@ -19,6 +19,9 @@
         <action android:id="@+id/action_mainFragment_to_collectionDetailFragment"
             app:destination="@id/collectionDetailFragment" />
 
+        <action android:id="@+id/action_mainFragment_to_photoDetailFragment"
+            app:destination="@id/photoDetailFragment" />
+
     </fragment>
 
     <fragment
@@ -29,5 +32,18 @@
         <argument
             android:name="collection"
             app:argType="eu.talich.waller.presentation.common.model.CollectionVo" />
+
+<!--        <action android:id="@+id/action_collectionDetailFragment_to_photoDetailFragment"-->
+<!--            app:destination="@id/photoDetailFragment" />-->
+    </fragment>
+
+    <fragment
+        android:id="@+id/photoDetailFragment"
+        android:name="eu.talich.waller.presentation.photodetail.PhotoDetailFragment"
+        android:label="PhotoDetailFragment"
+        tools:layout="@layout/fragment_photo_detail" >
+        <argument
+            android:name="photo"
+            app:argType="eu.talich.waller.presentation.common.model.PhotoVo" />
     </fragment>
 </navigation>

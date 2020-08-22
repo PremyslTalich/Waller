@@ -1,5 +1,7 @@
 package eu.talich.waller.presentation.common.model
 
+import java.io.Serializable
+
 data class PhotoVo(
     val id: String,
     val description: String?,
@@ -8,4 +10,4 @@ data class PhotoVo(
     val color: String,
     val smallUrl: String?,
     val downloadUrl: String?
-)
+) : Serializable

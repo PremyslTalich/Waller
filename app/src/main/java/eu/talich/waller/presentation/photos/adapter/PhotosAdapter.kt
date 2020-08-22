@@ -2,10 +2,12 @@ package eu.talich.waller.presentation.photos.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import eu.talich.waller.presentation.common.model.PhotoVo
 import eu.talich.waller.presentation.photos.vh.PhotoViewHolder
 import eu.talich.waller.presentation.common.adapter.InfiniteLoader
+import eu.talich.waller.presentation.main.MainFragmentDirections
 
 class PhotosAdapter(
     private var photos: MutableList<PhotoVo>,
@@ -18,6 +20,11 @@ class PhotosAdapter(
 
     override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
         holder.bind(photos[position])
+
+        holder.itemView.setOnClickListener {
+            val args = MainFragmentDirections.actionMainFragmentToPhotoDetailFragment(photos[position])
+            it.findNavController().navigate(args)
+        }
 
         if (position == itemCount - 1) {
             infiniteLoader.loadMore()

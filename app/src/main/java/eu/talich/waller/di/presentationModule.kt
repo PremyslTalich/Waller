@@ -10,6 +10,8 @@ import eu.talich.waller.presentation.main.vm.MainFragmentViewModel
 import eu.talich.waller.presentation.main.vm.MainViewModel
 import eu.talich.waller.presentation.photos.PhotosFragment
 import eu.talich.waller.presentation.common.mapper.PhotoMapper
+import eu.talich.waller.presentation.common.model.PhotoVo
+import eu.talich.waller.presentation.photodetail.vm.PhotoDetailViewModel
 import eu.talich.waller.presentation.photos.vm.PhotosViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -23,6 +25,8 @@ val presentationModule = module {
         PhotosFragment(),
         CollectionsFragment()
     )) }
+
+    viewModel { (photo: PhotoVo) -> PhotoDetailViewModel(photo) }
 
     viewModel { PhotosViewModel(get(), get()) }
     factory { PhotoMapper() }
