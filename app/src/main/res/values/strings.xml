@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Waller</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="photos_title">Photos</string>
+    <string name="collections_title">Collections</string>
 </resources>

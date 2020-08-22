@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainFragment" >
+
+<!--    <action-->
+<!--        android:id="@+id/action_nav_graph_self"-->
+<!--        app:destination="@id/nav_graph"-->
+<!--        app:popUpTo="@id/nav_graph" />-->
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="eu.talich.waller.presentation.main.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main" >
+
+        <action android:id="@+id/action_mainFragment_to_collectionDetailFragment"
+            app:destination="@id/collectionDetailFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/collectionDetailFragment"
+        android:name="eu.talich.waller.presentation.collectiondetail.CollectionDetailFragment"
+        android:label="CollectionDetailFragment"
+        tools:layout="@layout/fragment_collection_detail" >
+        <argument
+            android:name="collection"
+            app:argType="eu.talich.waller.presentation.common.model.CollectionVo" />
+    </fragment>
+</navigation>
