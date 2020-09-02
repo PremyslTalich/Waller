@@ -6,6 +6,7 @@ import eu.talich.waller.presentation.collections.CollectionsFragment
 import eu.talich.waller.presentation.common.model.CollectionVo
 import eu.talich.waller.presentation.common.mapper.CollectionMapper
 import eu.talich.waller.presentation.collections.vm.CollectionsViewModel
+import eu.talich.waller.presentation.common.mapper.PhotoDetailMapper
 import eu.talich.waller.presentation.main.vm.MainFragmentViewModel
 import eu.talich.waller.presentation.main.vm.MainViewModel
 import eu.talich.waller.presentation.photos.PhotosFragment
@@ -25,14 +26,12 @@ val presentationModule = module {
         PhotosFragment(),
         CollectionsFragment()
     )) }
-
-    viewModel { (photo: PhotoVo) -> PhotoDetailViewModel(photo) }
-
+    viewModel { (photo: PhotoVo) -> PhotoDetailViewModel(get(), get(), photo) }
     viewModel { PhotosViewModel(get(), get()) }
-    factory { PhotoMapper() }
-
     viewModel { CollectionsViewModel(get(), get()) }
-    factory { CollectionMapper() }
-
     viewModel { (collection: CollectionVo) -> CollectionDetailViewModel(get(), collection, get()) }
+
+    factory { PhotoMapper() }
+    factory { PhotoDetailMapper() }
+    factory { CollectionMapper() }
 }

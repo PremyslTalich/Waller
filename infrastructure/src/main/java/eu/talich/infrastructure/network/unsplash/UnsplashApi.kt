@@ -1,6 +1,7 @@
 package eu.talich.infrastructure.network.unsplash
 
 import eu.talich.infrastructure.model.unsplash.CollectionDto
+import eu.talich.infrastructure.model.unsplash.PhotoDetailDto
 import eu.talich.infrastructure.model.unsplash.PhotoDto
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -11,6 +12,11 @@ interface UnsplashApi {
     suspend fun getPhotos(
         @Query("page") page: Int
     ): List<PhotoDto>
+
+    @GET("/photos/{id}")
+    suspend fun getPhotoDetail(
+        @Path("id") photoId: String
+    ): PhotoDetailDto
 
     @GET("/collections/featured")
     suspend fun getFeaturedCollections(

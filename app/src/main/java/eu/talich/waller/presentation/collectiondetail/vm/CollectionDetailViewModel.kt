@@ -27,6 +27,8 @@ class CollectionDetailViewModel(
 
     var page: Int = 0
 
+    var hasTransitionEnded: Boolean = false
+
     init {
         loadMoreCollectionPhotos()
     }

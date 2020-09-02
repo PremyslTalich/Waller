@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayoutMediator
 import eu.talich.waller.R
 import eu.talich.waller.databinding.FragmentMainBinding
+import eu.talich.waller.presentation.common.extension.showToolbar
 import eu.talich.waller.presentation.main.adapter.MainPagerAdapter
 import eu.talich.waller.presentation.main.vm.MainFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -24,6 +26,7 @@ class MainFragment : Fragment(R.layout.fragment_main), KoinComponent {
         val mainPagerAdapter = MainPagerAdapter(requireActivity())
 
         binding = FragmentMainBinding.inflate(inflater, container, false)
+        (activity as AppCompatActivity).showToolbar()
         val view = binding.root
 
         binding.pager.adapter = mainPagerAdapter

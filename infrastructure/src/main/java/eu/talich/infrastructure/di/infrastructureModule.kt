@@ -1,13 +1,15 @@
 package eu.talich.infrastructure.di
 
 import com.facebook.flipper.plugins.network.FlipperOkhttpInterceptor
-import com.facebook.flipper.plugins.network.NetworkFlipperPlugin
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import eu.talich.data.source.CollectionsSource
 import eu.talich.data.source.PhotoSource
 import eu.talich.infrastructure.model.unsplash.mapper.CollectionMapper
+import eu.talich.infrastructure.model.unsplash.mapper.PhotoDetailMapper
 import eu.talich.infrastructure.model.unsplash.mapper.PhotoMapper
+import eu.talich.infrastructure.model.unsplash.mapper.UserMapper
 import eu.talich.infrastructure.network.unsplash.AuthorizationInterceptor
 import eu.talich.infrastructure.network.unsplash.UnsplashApi
 import eu.talich.infrastructure.source.CollectionsSourceImpl
@@ -16,6 +18,7 @@ import okhttp3.OkHttpClient
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.util.*
 
 private const val UNSPLASH_BASE_URL = "https://api.unsplash.com"
 
@@ -23,7 +26,9 @@ val infrastructureModule = module {
 
     factory { PhotoMapper() }
     factory { CollectionMapper() }
-    factory<PhotoSource> { PhotoSourceImpl(get(), get()) }
+    factory { PhotoDetailMapper(get()) }
+    factory { UserMapper() }
+    factory<PhotoSource> { PhotoSourceImpl(get(), get(), get()) }
     factory<CollectionsSource> { CollectionsSourceImpl(get(), get(), get()) }
 
     factory {
@@ -45,6 +50,7 @@ val infrastructureModule = module {
     single<Moshi> {
         Moshi.Builder()
             .add(KotlinJsonAdapterFactory())
+            .add(Date::class.java, Rfc3339DateJsonAdapter().nullSafe())
             .build()
     }
 }
