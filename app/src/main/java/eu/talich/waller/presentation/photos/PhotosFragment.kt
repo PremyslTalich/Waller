@@ -28,6 +28,12 @@ class PhotosFragment : Fragment(R.layout.fragment_photos),
 
     private val photosAdapter = PhotosAdapter(mutableListOf(), this)
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        observePhotos()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,8 +45,6 @@ class PhotosFragment : Fragment(R.layout.fragment_photos),
             layoutManager = LinearLayoutManager(view.context)
             adapter = photosAdapter
         }
-
-        observePhotos()
 
         return view
     }

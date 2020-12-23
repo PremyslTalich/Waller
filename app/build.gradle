@@ -82,4 +82,7 @@ dependencies {
     debugImplementation 'com.facebook.flipper:flipper-network-plugin:0.51.0'
 
     releaseImplementation 'com.facebook.flipper:flipper-noop:0.51.0'
+
+    // PhotoView
+//    implementation 'com.github.chrisbanes:PhotoView:latest.release.here'
 }

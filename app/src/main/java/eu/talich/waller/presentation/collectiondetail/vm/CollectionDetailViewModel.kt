@@ -2,9 +2,9 @@ package eu.talich.waller.presentation.collectiondetail.vm
 
 import androidx.lifecycle.ViewModel
 import eu.talich.domain.usecase.GetCollectionPhotosUseCase
+import eu.talich.waller.presentation.common.mapper.PhotoMapper
 import eu.talich.waller.presentation.common.model.CollectionVo
 import eu.talich.waller.presentation.common.model.PhotoVo
-import eu.talich.waller.presentation.common.mapper.PhotoMapper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -25,8 +25,7 @@ class CollectionDetailViewModel(
     private val _photos = MutableStateFlow<List<PhotoVo>>(listOf())
     val photos: StateFlow<List<PhotoVo>> = _photos
 
-    var page: Int = 0
-
+    var page: Int = 1
     var hasTransitionEnded: Boolean = false
 
     init {
@@ -34,18 +33,19 @@ class CollectionDetailViewModel(
     }
 
     fun loadMoreCollectionPhotos() {
-        page++
-
         launch(Dispatchers.IO) {
-            val photos = getCollectionPhotosUseCase(collection.id, page).map {
+            val newPhotos = getCollectionPhotosUseCase(collection.id, page).map {
                 photoMapper.map(it)
             }.toMutableList()
 
             if (page == 1) {
-                photos.removeFirst()
+                newPhotos.removeFirst()
             }
 
-            _photos.value = photos
+            if (newPhotos.isNotEmpty()) {
+                _photos.value = newPhotos
+                page++
+            }
         }
     }
 

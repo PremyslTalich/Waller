@@ -1,6 +1,7 @@
 package eu.talich.waller.presentation.main
 
 import android.os.Bundle
+import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
 import eu.talich.waller.databinding.ActivityMainBinding
 import eu.talich.waller.presentation.main.vm.MainViewModel
@@ -15,8 +16,11 @@ class MainActivity: AppCompatActivity(), KoinComponent {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
     }
 }

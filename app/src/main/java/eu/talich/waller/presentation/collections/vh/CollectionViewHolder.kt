@@ -13,7 +13,7 @@ class CollectionViewHolder(inflater: LayoutInflater, parent: ViewGroup): Recycle
     fun bind(collectionVo: CollectionVo) {
         itemView.title.text = collectionVo.title
 
-        collectionVo.coverPhotoUrl?.let { it ->
+        collectionVo.coverPhoto?.smallUrl?.let { it ->
             itemView.coverPhoto.loadPhoto(it)
         }
     }

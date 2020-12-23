@@ -28,7 +28,6 @@ class PhotoDetailFragment : Fragment(R.layout.fragment_photo_detail) {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentPhotoDetailBinding.inflate(inflater, container, false)
-        (activity as AppCompatActivity).hideToolbar()
         (activity as AppCompatActivity).enterFullScreenMode()
 
         val view = binding.root

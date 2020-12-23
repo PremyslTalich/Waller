@@ -21,18 +21,21 @@ class PhotosViewModel(
     private val _photos = MutableStateFlow<List<PhotoVo>>(listOf())
     val photos: StateFlow<List<PhotoVo>> = _photos
 
-    private var page: Int = 0
+    private var page: Int = 1
 
     init {
         loadMorePhotos()
     }
 
     fun loadMorePhotos() {
-        page++
-
         launch(Dispatchers.IO) {
-            _photos.value = getPhotosUseCase(page).map {
+            val newPhotos = getPhotosUseCase(page).map {
                 photoMapper.map(it)
+            }
+
+            if (newPhotos.isNotEmpty()) {
+                _photos.value = newPhotos
+                page++
             }
         }
     }

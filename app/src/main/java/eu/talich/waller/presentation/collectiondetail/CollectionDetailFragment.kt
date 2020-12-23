@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import eu.talich.waller.R
@@ -15,7 +15,6 @@ import eu.talich.waller.databinding.FragmentCollectionDetailBinding
 import eu.talich.waller.presentation.collectiondetail.adapter.PhotosAdapter
 import eu.talich.waller.presentation.collectiondetail.vm.CollectionDetailViewModel
 import eu.talich.waller.presentation.common.adapter.InfiniteLoader
-import eu.talich.waller.presentation.common.extension.hideToolbar
 import eu.talich.waller.presentation.common.extension.loadPhoto
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -30,18 +29,26 @@ class CollectionDetailFragment : Fragment(R.layout.fragment_collection_detail), 
 
     private val photosAdapter = PhotosAdapter(mutableListOf(), this)
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        observeCollectionPhotos()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentCollectionDetailBinding.inflate(inflater, container, false)
-        (activity as AppCompatActivity).hideToolbar()
         val view = binding.root
 
-        binding.title.text = viewModel.collection.title
-        binding.description.text = viewModel.collection.description
+        if (viewModel.collection.description.isNotBlank()) {
+            binding.description.text = viewModel.collection.description
+        } else {
+            binding.description.text = viewModel.collection.title
+        }
 
-        viewModel.collection.coverPhotoUrl?.let {
+        viewModel.collection.coverPhoto?.smallUrl?.let {
             binding.coverPhoto.loadPhoto(it)
         }
 
@@ -50,7 +57,12 @@ class CollectionDetailFragment : Fragment(R.layout.fragment_collection_detail), 
             adapter = photosAdapter
         }
 
-        observeCollectionPhotos()
+        binding.coverPhoto.setOnClickListener {
+            viewModel.collection.coverPhoto?.let { photo ->
+                val args = CollectionDetailFragmentDirections.actionCollectionDetailFragmentToPhotoDetailFragment(photo)
+                it.findNavController().navigate(args)
+            }
+        }
 
         binding.motionLayout.setTransitionListener(this)
 
@@ -84,6 +96,6 @@ class CollectionDetailFragment : Fragment(R.layout.fragment_collection_detail), 
     override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {}
 
     override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
-        viewModel.hasTransitionEnded = (p1 == R.id.end )
+        viewModel.hasTransitionEnded = (p1 == R.id.end)
     }
 }
