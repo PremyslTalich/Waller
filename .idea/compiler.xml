@@ -4,8 +4,8 @@
     <bytecodeTargetLevel target="1.7">
       <module name="data" target="1.7" />
       <module name="domain" target="1.7" />
-      <module name="Waller.app" target="1.8" />
-      <module name="Waller.infrastructure" target="1.8" />
+      <module name="Waller.app" target="11" />
+      <module name="Waller.infrastructure" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

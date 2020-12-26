@@ -4,6 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import eu.talich.waller.R
+import eu.talich.waller.databinding.PhotosItemImageBinding
 import eu.talich.waller.presentation.common.model.PhotoVo
 import eu.talich.waller.presentation.photos.vh.PhotoViewHolder
 import eu.talich.waller.presentation.common.adapter.InfiniteLoader
@@ -14,8 +16,8 @@ class PhotosAdapter(
     private val infiniteLoader: InfiniteLoader
 ): RecyclerView.Adapter<PhotoViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        return PhotoViewHolder(inflater, parent)
+        val binding = PhotosItemImageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return PhotoViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {

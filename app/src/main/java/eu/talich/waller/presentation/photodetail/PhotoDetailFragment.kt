@@ -5,12 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.material.MaterialTheme
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import eu.talich.waller.R
 import eu.talich.waller.databinding.FragmentPhotoDetailBinding
-import eu.talich.waller.presentation.common.extension.*
+import eu.talich.waller.presentation.common.extension.enterFullScreenMode
+import eu.talich.waller.presentation.common.extension.exitFullScreenMode
+import eu.talich.waller.presentation.common.extension.loadPhoto
+import eu.talich.waller.presentation.common.extension.toPrettyString
+import eu.talich.waller.presentation.photodetail.ui.PhotoDetailCard
 import eu.talich.waller.presentation.photodetail.vm.PhotoDetailViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -28,12 +33,13 @@ class PhotoDetailFragment : Fragment(R.layout.fragment_photo_detail) {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentPhotoDetailBinding.inflate(inflater, container, false)
+
         (activity as AppCompatActivity).enterFullScreenMode()
 
         val view = binding.root
 
         // TODO pořešit ten double bang!!
-        binding.photo.loadPhoto(viewModel.photo.smallUrl!!)
+        binding.photo.loadPhoto(viewModel.photo.fullUrl!!)
 
         observePhotoDetail()
 
@@ -50,12 +56,13 @@ class PhotoDetailFragment : Fragment(R.layout.fragment_photo_detail) {
         lifecycleScope.launch {
             viewModel.photoDetail.collect { photoDetail ->
                 photoDetail?.let {
-                    binding.name.text = it.user.name
-                    binding.username.text = it.user.username
-                    binding.description.text = it.description
-                    binding.createdAt.text = it.createdAt.toPrettyString()
-                    binding.likes.text = it.likes.toString()
-                    binding.tags.text = it.tags.joinToString()
+                    binding.photoDetailCard.setContent {
+                        MaterialTheme {
+                            with(it) {
+                                PhotoDetailCard(user, description, createdAt, likes, tags)
+                            }
+                        }
+                    }
                 }
             }
         }

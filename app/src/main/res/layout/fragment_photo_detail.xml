@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         app:layoutDescription="@xml/fragment_photo_detail_scene">
 
-        <ImageView
+        <com.github.chrisbanes.photoview.PhotoView
             android:id="@+id/photo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -41,69 +41,14 @@
                 android:layout_height="wrap_content"
                 android:padding="20dp">
 
-                <TextView
-                    android:id="@+id/name"
-                    style="@style/photo_detail_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <androidx.compose.ui.platform.ComposeView
+                    android:id="@+id/photo_detail_card"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    tools:text="John Doe"
-                    android:text="@string/not_avaiable" />
-
-                <TextView
-                    android:id="@+id/username"
-                    style="@style/photo_detail_username"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@+id/name"
-                    app:layout_constraintStart_toStartOf="parent"
-                    tools:text="john_doe"
-                    android:text="@string/not_avaiable" />
-
-                <TextView
-                    android:id="@+id/description"
-                    style="@style/photo_detail_description"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:text="@string/not_avaiable"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/username"
-                    tools:text="Something that I 'just shot'..." />
-
-                <TextView
-                    android:id="@+id/createdAt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:text="@string/not_avaiable"
-                    app:drawableStartCompat="@drawable/ic_calendar"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/description"
-                    tools:text="1993-03-25" />
-
-                <TextView
-                    android:id="@+id/likes"
-                    style="@style/photo_detail_likes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/not_avaiable"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/createdAt"
-                    tools:text="23 456" />
-
-                <TextView
-                    android:id="@+id/tags"
-                    style="@style/photo_detail_tags"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:text="@string/not_avaiable"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/createdAt"
-                    tools:text="NotaBadShot Something Good" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -6,14 +6,17 @@ import eu.talich.waller.presentation.common.model.PhotoVo
 
 class PhotoMapper: Mapper<Photo, PhotoVo> {
     override fun map(from: Photo): PhotoVo {
-        return PhotoVo(
-            from.id,
-            from.description,
-            from.width,
-            from.height,
-            from.color,
-            from.urls?.small,
-            from.urls?.regular
-        )
+        return with(from) {
+            PhotoVo(
+                id,
+                description,
+                width,
+                height,
+                color,
+                urls?.small,
+                urls?.regular,
+                urls?.full
+            )
+        }
     }
 }
