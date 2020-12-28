@@ -40,6 +40,7 @@ class PhotoDetailFragment : Fragment(R.layout.fragment_photo_detail) {
 
         // TODO pořešit ten double bang!!
         binding.photo.loadPhoto(viewModel.photo.fullUrl!!)
+        binding.photo.maximumScale = 5f
 
         observePhotoDetail()
 

@@ -6,10 +6,7 @@ import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import eu.talich.data.source.CollectionsSource
 import eu.talich.data.source.PhotoSource
-import eu.talich.infrastructure.model.unsplash.mapper.CollectionMapper
-import eu.talich.infrastructure.model.unsplash.mapper.PhotoDetailMapper
-import eu.talich.infrastructure.model.unsplash.mapper.PhotoMapper
-import eu.talich.infrastructure.model.unsplash.mapper.UserMapper
+import eu.talich.infrastructure.model.unsplash.mapper.*
 import eu.talich.infrastructure.network.unsplash.AuthorizationInterceptor
 import eu.talich.infrastructure.network.unsplash.UnsplashApi
 import eu.talich.infrastructure.source.CollectionsSourceImpl
@@ -25,11 +22,13 @@ private const val UNSPLASH_BASE_URL = "https://api.unsplash.com"
 val infrastructureModule = module {
 
     factory { PhotoMapper() }
+    factory { PhotoSearchResultMapper(get()) }
     factory { CollectionMapper() }
+    factory { CollectionSearchResultMapper(get()) }
     factory { PhotoDetailMapper(get()) }
     factory { UserMapper() }
-    factory<PhotoSource> { PhotoSourceImpl(get(), get(), get()) }
-    factory<CollectionsSource> { CollectionsSourceImpl(get(), get(), get()) }
+    factory<PhotoSource> { PhotoSourceImpl(get(), get(), get(), get()) }
+    factory<CollectionsSource> { CollectionsSourceImpl(get(), get(), get(), get()) }
 
     factory {
         OkHttpClient.Builder()

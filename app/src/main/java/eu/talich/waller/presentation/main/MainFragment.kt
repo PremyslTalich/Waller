@@ -1,9 +1,16 @@
 package eu.talich.waller.presentation.main
 
+import android.content.Context
 import android.os.Bundle
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+import android.widget.ImageButton
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayoutMediator
 import eu.talich.waller.R
@@ -12,6 +19,7 @@ import eu.talich.waller.presentation.main.adapter.MainPagerAdapter
 import eu.talich.waller.presentation.main.vm.MainFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.KoinComponent
+
 
 class MainFragment : Fragment(R.layout.fragment_main), KoinComponent {
     private lateinit var binding: FragmentMainBinding
@@ -33,6 +41,36 @@ class MainFragment : Fragment(R.layout.fragment_main), KoinComponent {
             tab.text = viewModel.getTabTitle(position)
         }.attach()
 
+        binding.pager.offscreenPageLimit = viewModel.pagerFragments.size - 1
+
+        binding.searchButton.setOnClickListener {
+            showSearchDialog()
+        }
+
         return view
+    }
+
+    private fun showSearchDialog() {
+        var searchQuery: EditText? = null
+        val view = layoutInflater.inflate(R.layout.dialog_search, null).apply {
+            searchQuery = findViewById<EditText>(R.id.searchQuery).apply {
+                inputType = InputType.TYPE_CLASS_TEXT
+                viewModel.searchQuery?.let {
+                    setText(it)
+                }
+                requestFocus()
+            }
+            findViewById<ImageButton>(R.id.clearButton).setOnClickListener {
+                searchQuery?.setText("")
+            }
+        }
+
+        AlertDialog.Builder(requireActivity())
+            .setTitle(R.string.search_dialog_title)
+            .setView(view)
+            .setOnDismissListener {
+                viewModel.setNewSearchQuery(searchQuery?.text.toString())
+            }
+            .show()
     }
 }

@@ -12,18 +12,22 @@ import eu.talich.waller.databinding.FragmentCollectionsBinding
 import eu.talich.waller.presentation.collections.adapter.CollectionsAdapter
 import eu.talich.waller.presentation.collections.vm.CollectionsViewModel
 import eu.talich.waller.presentation.common.TabbedFragment
+import eu.talich.waller.presentation.common.adapter.ClearAdapter
 import eu.talich.waller.presentation.common.adapter.InfiniteLoader
+import eu.talich.waller.presentation.photos.vm.PhotosViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
-class CollectionsFragment : Fragment(R.layout.fragment_collections), InfiniteLoader, TabbedFragment {
+class CollectionsFragment : Fragment(R.layout.fragment_collections), InfiniteLoader, TabbedFragment,
+    ClearAdapter {
 
     override val title: Int
         get() = R.string.collections_title
 
     private lateinit var binding: FragmentCollectionsBinding
-    private val viewModel by viewModel<CollectionsViewModel>()
+    private val viewModel: CollectionsViewModel by viewModel { parametersOf(this) }
 
     private val collectionsAdapter = CollectionsAdapter(mutableListOf(), this)
 
@@ -54,5 +58,11 @@ class CollectionsFragment : Fragment(R.layout.fragment_collections), InfiniteLoa
 
     override fun loadMore() {
         viewModel.loadMoreCollections()
+    }
+
+    override fun clearAdapter() {
+        requireActivity().runOnUiThread {
+            collectionsAdapter.removeCollections()
+        }
     }
 }

@@ -9,22 +9,25 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import eu.talich.waller.R
 import eu.talich.waller.databinding.FragmentPhotosBinding
+import eu.talich.waller.presentation.collectiondetail.vm.CollectionDetailViewModel
 import eu.talich.waller.presentation.common.TabbedFragment
+import eu.talich.waller.presentation.common.adapter.ClearAdapter
 import eu.talich.waller.presentation.common.adapter.InfiniteLoader
 import eu.talich.waller.presentation.photos.adapter.PhotosAdapter
 import eu.talich.waller.presentation.photos.vm.PhotosViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class PhotosFragment : Fragment(R.layout.fragment_photos),
-    InfiniteLoader, TabbedFragment {
+    InfiniteLoader, TabbedFragment, ClearAdapter {
 
     override val title: Int
         get() = R.string.photos_title
 
     private lateinit var binding: FragmentPhotosBinding
-    private val viewModel by viewModel<PhotosViewModel>()
+    private val viewModel: PhotosViewModel by viewModel { parametersOf(this) }
 
     private val photosAdapter = PhotosAdapter(mutableListOf(), this)
 
@@ -59,5 +62,11 @@ class PhotosFragment : Fragment(R.layout.fragment_photos),
 
     override fun loadMore() {
         viewModel.loadMorePhotos()
+    }
+
+    override fun clearAdapter() {
+        requireActivity().runOnUiThread {
+            photosAdapter.removePhotos()
+        }
     }
 }

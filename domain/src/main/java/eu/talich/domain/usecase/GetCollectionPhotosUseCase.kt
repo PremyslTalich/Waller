@@ -3,7 +3,6 @@ package eu.talich.domain.usecase
 import eu.talich.domain.model.Photo
 import eu.talich.domain.repository.CollectionRepository
 
-
 class GetCollectionPhotosUseCase(
     private val collectionRepository: CollectionRepository
 ) {

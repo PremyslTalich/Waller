@@ -40,4 +40,9 @@ class PhotosAdapter(
         photos.addAll(newPhotos)
         notifyItemRangeInserted(startIndex, newPhotos.size)
     }
+
+    fun removePhotos() {
+        photos.clear()
+        notifyDataSetChanged()
+    }
 }

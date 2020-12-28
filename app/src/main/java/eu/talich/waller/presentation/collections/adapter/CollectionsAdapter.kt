@@ -43,4 +43,9 @@ class CollectionsAdapter(
         collections.addAll(newCollections)
         notifyItemRangeInserted(startIndex, newCollections.size)
     }
+
+    fun removeCollections() {
+        collections.clear()
+        notifyDataSetChanged()
+    }
 }

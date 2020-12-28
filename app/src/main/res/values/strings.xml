@@ -5,4 +5,5 @@
     <string name="photos_title">Photos</string>
     <string name="collections_title">Collections</string>
     <string name="not_avaiable">N/A</string>
+    <string name="search_dialog_title">Search</string>
 </resources>

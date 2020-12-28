@@ -3,7 +3,6 @@ package eu.talich.domain.usecase
 import eu.talich.domain.model.Collection
 import eu.talich.domain.repository.CollectionRepository
 
-
 class GetFeaturedCollectionsUseCase(
     private val collectionRepository: CollectionRepository
 ) {
