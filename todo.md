@@ -4,3 +4,4 @@
 - Add location info to photo detail info card
 - Add clickable tags on photo detail info card, so user can easily search by tags on photo
 - Add context menu on collection detail screen with options like "use this collection for autowaller etc."
+- Gradle to kotlin
