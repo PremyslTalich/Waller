@@ -8,6 +8,7 @@ import eu.talich.waller.presentation.common.model.CollectionVo
 class CollectionViewHolder(private val binding: CollectionsItemCollectionBinding): RecyclerView.ViewHolder(binding.root) {
     fun bind(collectionVo: CollectionVo) {
         binding.title.text = collectionVo.title
+        binding.totalPhotos.text = collectionVo.totalPhotos.toString()
 
         collectionVo.coverPhoto?.smallUrl?.let { it ->
             binding.coverPhoto.loadPhoto(it)

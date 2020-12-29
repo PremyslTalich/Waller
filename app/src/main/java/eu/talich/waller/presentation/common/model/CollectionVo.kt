@@ -6,5 +6,6 @@ data class CollectionVo (
     val id: String,
     val title: String,
     val description: String,
+    val totalPhotos: Int,
     val coverPhoto: PhotoVo?
 ) : Serializable

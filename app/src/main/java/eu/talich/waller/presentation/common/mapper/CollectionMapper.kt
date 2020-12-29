@@ -9,11 +9,14 @@ class CollectionMapper(
     private val photoMapper: PhotoMapper
 ): Mapper<Collection, CollectionVo> {
     override fun map(from: Collection): CollectionVo {
-        return CollectionVo(
-            from.id,
-            from.title ?: "",
-            from.description ?: "",
-            from.coverPhoto?.let { photoMapper.map(it) }
-        )
+        return with(from) {
+            CollectionVo(
+                id,
+                title ?: "",
+                description ?: "",
+                totalPhotos,
+                coverPhoto?.let { photoMapper.map(it) }
+            )
+        }
     }
 }
