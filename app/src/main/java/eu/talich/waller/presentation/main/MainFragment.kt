@@ -1,16 +1,15 @@
 package eu.talich.waller.presentation.main
 
-import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayoutMediator
 import eu.talich.waller.R
@@ -66,11 +65,13 @@ class MainFragment : Fragment(R.layout.fragment_main), KoinComponent {
         }
 
         AlertDialog.Builder(requireActivity())
-            .setTitle(R.string.search_dialog_title)
+//            .setTitle(R.string.search_dialog_title)
             .setView(view)
             .setOnDismissListener {
                 viewModel.setNewSearchQuery(searchQuery?.text.toString())
             }
-            .show()
+            .show().apply {
+                window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            }
     }
 }
