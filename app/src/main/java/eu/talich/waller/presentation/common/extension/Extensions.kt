@@ -3,7 +3,10 @@ package eu.talich.waller.presentation.common.extension
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.view.View
+import android.view.View.*
 import android.view.WindowManager
+import android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -28,9 +31,14 @@ fun Date.toPrettyString() : String {
 }
 
 fun AppCompatActivity.enterFullScreenMode() {
-    this.window?.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+    window.decorView.systemUiVisibility = (
+        SYSTEM_UI_FLAG_HIDE_NAVIGATION
+        or SYSTEM_UI_FLAG_FULLSCREEN
+    )
 }
 
 fun AppCompatActivity.exitFullScreenMode() {
-    this.window?.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+    window.decorView.systemUiVisibility = (
+        SYSTEM_UI_FLAG_LAYOUT_STABLE
+    )
 }
