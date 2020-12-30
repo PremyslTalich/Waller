@@ -1,24 +1,27 @@
 package eu.talich.waller.presentation.photodetail.ui
 
+import android.content.Context
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import eu.talich.domain.model.PhotoLocation
 import eu.talich.domain.model.User
 import eu.talich.waller.R
 import eu.talich.waller.presentation.common.extension.toPrettyString
 import java.util.*
+
+val defaultGray = Color(117,117,117)
 
 @Composable
 fun PhotoDetailCard(
@@ -26,17 +29,20 @@ fun PhotoDetailCard(
     description: String?,
     createdAt: Date,
     likes: Int,
-    tags: List<String>
+    location: PhotoLocation,
+    tags: List<String>,
+    onLocationClick: (lat: Float, lon: Float) -> Unit
 ) {
-
-    val defaultGray = Color(117,117,117)
+    val context = AmbientContext.current
 
     Column {
         Text(text = user.name, fontSize = TextUnit.Sp(20), color = Color.Black)
         Text(text = user.username, fontSize = TextUnit.Sp(12), fontStyle = FontStyle.Italic, color = defaultGray, modifier = Modifier.padding(start = 10.dp))
+
         if (!description.isNullOrBlank()) {
             Text(text = description, fontStyle = FontStyle.Italic, color = Color.Black, modifier = Modifier.padding(top = 24.dp))
         }
+
         Row(modifier = Modifier.padding(top = 24.dp)) {
             Image(vectorResource(id = R.drawable.ic_calendar))
             Text(text = createdAt.toPrettyString(), fontSize = TextUnit.Sp(14), color = defaultGray, fontStyle = FontStyle.Italic)
@@ -44,8 +50,50 @@ fun PhotoDetailCard(
             Text(text = likes.toString(), fontStyle = FontStyle.Italic)
             Image(vectorResource(id = R.drawable.ic_heart), modifier = Modifier.padding(start = 5.dp).scale(0.75f).align(Alignment.CenterVertically))
         }
+
+        PhotoDetailCardLocation(context, location, onLocationClick)
+
         if (tags.isNotEmpty()) {
             Text(text = tags.joinToString(), fontSize = TextUnit.Sp(14), fontStyle = FontStyle.Italic, color = defaultGray, modifier = Modifier.padding(top = 24.dp))
+        }
+    }
+}
+
+@Composable
+fun PhotoDetailCardLocation(context: Context, location: PhotoLocation, onLocationClick: (lat: Float, lon: Float) -> Unit) {
+    val address = with(location) {
+        city?.let { city ->
+            country?.let { country ->
+                context.getString(R.string.photo_location_both, city, country)
+            } ?: run {
+                city
+            }
+        } ?: run {
+            country
+        }
+    }
+
+    val gpsLocation = with(location) {
+        if (latitude != null && longitude != null) {
+            "$latitude, $longitude"
+        } else {
+            null
+        }
+    }
+
+    if (address != null || gpsLocation != null) {
+        Row(modifier = Modifier.clickable(onClick = { onLocationClick(location.latitude!!, location.longitude!!) }).fillMaxWidth()) {
+            Image(vectorResource(id = R.drawable.ic_globe), modifier = Modifier.width(20.dp).padding(start = 4.dp, top = 3.dp))
+
+            Column {
+                (address ?: gpsLocation)?.let {
+                    Text(text = it, modifier = Modifier.padding(start = 3.dp), fontSize = TextUnit.Sp(14), color = defaultGray, fontStyle = FontStyle.Italic)
+                }
+
+                if (address != null && gpsLocation != null) {
+                    Text(text = "($gpsLocation)", modifier = Modifier.padding(start = 11.dp), fontSize = TextUnit.Sp(12), color = defaultGray, fontStyle = FontStyle.Italic)
+                }
+            }
         }
     }
 }

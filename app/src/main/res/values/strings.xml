@@ -6,4 +6,5 @@
     <string name="collections_title">Collections</string>
     <string name="not_avaiable">N/A</string>
     <string name="search_dialog_title">Search</string>
+    <string name="photo_location_both">%1$s in %2$s</string>
 </resources>

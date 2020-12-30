@@ -1,5 +1,7 @@
 package eu.talich.waller.presentation.photodetail
 
+import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -53,6 +55,15 @@ class PhotoDetailFragment : Fragment(R.layout.fragment_photo_detail) {
         (activity as AppCompatActivity).exitFullScreenMode()
     }
 
+    fun onLocationClick(lat: Float, lon: Float) {
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            data = Uri.parse("geo:" + lat + "," + lon)
+        }
+        if (intent.resolveActivity(requireContext().getPackageManager()) != null) {
+            startActivity(intent)
+        }
+    }
+
     private fun observePhotoDetail() {
         lifecycleScope.launch {
             viewModel.photoDetail.collect { photoDetail ->
@@ -60,7 +71,15 @@ class PhotoDetailFragment : Fragment(R.layout.fragment_photo_detail) {
                     binding.photoDetailCard.setContent {
                         MaterialTheme {
                             with(it) {
-                                PhotoDetailCard(user, description, createdAt, likes, tags)
+                                PhotoDetailCard(
+                                    user,
+                                    description,
+                                    createdAt,
+                                    likes,
+                                    location,
+                                    tags,
+                                    ::onLocationClick
+                                )
                             }
                         }
                     }
