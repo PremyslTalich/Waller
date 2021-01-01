@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import eu.talich.domain.usecase.GetPhotosUseCase
 import eu.talich.domain.usecase.GetSearchQueryUseCase
 import eu.talich.domain.usecase.SearchPhotosUseCase
+import eu.talich.waller.R
 import eu.talich.waller.presentation.common.adapter.ClearAdapter
 import eu.talich.waller.presentation.common.mapper.PhotoMapper
 import eu.talich.waller.presentation.common.model.PhotoVo
@@ -27,6 +28,9 @@ class PhotosViewModel(
 
     private val _photos = MutableStateFlow<List<PhotoVo>>(listOf())
     val photos: StateFlow<List<PhotoVo>> = _photos
+
+    private val _state = MutableStateFlow<ViewState>(Init)
+    val state: StateFlow<ViewState> = _state
 
     private var page: Int = 1
     private var searchQuery: String? = null
@@ -61,7 +65,12 @@ class PhotosViewModel(
 
             if (newPhotos.isNotEmpty()) {
                 _photos.value = newPhotos
+                _state.value = HasPhotos
                 page++
+            } else {
+                if (searchQuery != null && page == 1) {
+                    _state.value = EmptySearch(R.drawable.ic_heart, R.string.no_photos_found)
+                }
             }
         }
     }

@@ -1,6 +1,5 @@
 # Todo
 - Add "no internet" message for the user (no more crashes hopefully...)
-- Add "empty search result" message for the user
 - Add "no more photos/collections" message for the user (at the end of pagination)
 - Remove clickable location on photo detail card when no gps location is available
 - Add loading notification fot the user
@@ -12,6 +11,7 @@
 - Gradle to kotlin
 
 # Done
+- Add "empty search result" message for the user
 - Add location info to photo detail info card
 - Hide status bar on photo detail screen
 - Add "photo count" to collection card on collections fragment

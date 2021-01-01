@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import eu.talich.domain.usecase.GetFeaturedCollectionsUseCase
 import eu.talich.domain.usecase.GetSearchQueryUseCase
 import eu.talich.domain.usecase.SearchCollectionsUseCase
+import eu.talich.waller.R
 import eu.talich.waller.presentation.common.adapter.ClearAdapter
 import eu.talich.waller.presentation.common.mapper.CollectionMapper
 import eu.talich.waller.presentation.common.model.CollectionVo
@@ -29,6 +30,9 @@ class CollectionsViewModel(
 
     private val _collections = MutableStateFlow<List<CollectionVo>>(listOf())
     val collections: StateFlow<List<CollectionVo>> = _collections
+
+    private val _state = MutableStateFlow<ViewState>(Init)
+    val state: StateFlow<ViewState> = _state
 
     private var page: Int = 1
     private var searchQuery: String? = null
@@ -63,7 +67,12 @@ class CollectionsViewModel(
 
             if (newCollections.isNotEmpty()) {
                 _collections.value = newCollections
+                _state.value = HasCollections
                 page++
+            } else {
+                if (searchQuery != null && page == 1) {
+                    _state.value = EmptySearch(R.drawable.ic_heart, R.string.no_photos_found)
+                }
             }
         }
     }
