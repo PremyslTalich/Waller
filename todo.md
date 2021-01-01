@@ -1,4 +1,5 @@
 # Todo
+- Add "safe calling" the REST APIs and some kind of "result" for the UCs... now it just crashes when the user has no internet...
 - Add "no internet" message for the user (no more crashes hopefully...)
 - Add "no more photos/collections" message for the user (at the end of pagination)
 - Remove clickable location on photo detail card when no gps location is available
