@@ -1,4 +1,5 @@
 # Todo
+- Add proper splash screen
 - Add "no more photos/collections" message for the user (at the end of pagination)
 - Add loading notification fot the user
     - Loading more photos/collections
