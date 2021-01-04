@@ -5,14 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import eu.talich.waller.R
 import eu.talich.waller.databinding.FragmentCollectionsBinding
 import eu.talich.waller.presentation.collections.adapter.CollectionsAdapter
+import eu.talich.waller.presentation.collections.vm.BadConnection
 import eu.talich.waller.presentation.collections.vm.CollectionsViewModel
 import eu.talich.waller.presentation.collections.vm.EmptySearch
+import eu.talich.waller.presentation.collections.vm.NoInternet
 import eu.talich.waller.presentation.common.TabbedFragment
 import eu.talich.waller.presentation.common.adapter.ClearAdapter
 import eu.talich.waller.presentation.common.adapter.InfiniteLoader
@@ -46,12 +50,18 @@ class CollectionsFragment : Fragment(R.layout.fragment_collections), InfiniteLoa
         }
 
         binding.noCollectionsAlert.setContent {
+            val state by viewModel.state.collectAsState()
+
             MaterialTheme {
-                BackgroundAlert(R.drawable.ic_search_off, R.string.no_collections_found)
+                when(state) {
+                    is EmptySearch -> BackgroundAlert(R.drawable.ic_search_off, R.string.no_collections_found)
+                    is BadConnection -> BackgroundAlert(R.drawable.ic_bad_connection, R.string.bad_unsplash_connection)
+                    is NoInternet -> BackgroundAlert(R.drawable.ic_no_internet, R.string.no_internet)
+                    else -> Unit
+                }
             }
         }
 
-        observeState()
         observeCollections()
 
         return view
@@ -61,23 +71,6 @@ class CollectionsFragment : Fragment(R.layout.fragment_collections), InfiniteLoa
         lifecycleScope.launch {
             viewModel.collections.collect { value ->
                 collectionsAdapter.addCollections(value)
-            }
-        }
-    }
-
-    private fun observeState() {
-        lifecycleScope.launch {
-            viewModel.state.collect { value ->
-                when (value) {
-                    is EmptySearch -> {
-                        // add observable for the EmptyListAlert and change the value here
-                        // (so i can change the message and image in EmptyListAlert on fly)
-                        binding.noCollectionsAlert.visibility = View.VISIBLE
-                    }
-                    else -> {
-                        binding.noCollectionsAlert.visibility = View.GONE
-                    }
-                }
             }
         }
     }

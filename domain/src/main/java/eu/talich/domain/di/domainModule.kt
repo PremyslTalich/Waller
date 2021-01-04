@@ -13,4 +13,5 @@ val domainModule = module {
     factory { GetCollectionPhotosUseCase(get()) }
     factory { GetSearchQueryUseCase(get()) }
     factory { SetSearchQueryUseCase(get()) }
+    factory { ObserveInternetConnectionUseCase(get()) }
 }

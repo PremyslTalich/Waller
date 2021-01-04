@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,7 +17,10 @@ import eu.talich.waller.presentation.common.adapter.ClearAdapter
 import eu.talich.waller.presentation.common.adapter.InfiniteLoader
 import eu.talich.waller.presentation.common.ui.BackgroundAlert
 import eu.talich.waller.presentation.photos.adapter.PhotosAdapter
-import eu.talich.waller.presentation.photos.vm.*
+import eu.talich.waller.presentation.photos.vm.BadConnection
+import eu.talich.waller.presentation.photos.vm.EmptySearch
+import eu.talich.waller.presentation.photos.vm.NoInternet
+import eu.talich.waller.presentation.photos.vm.PhotosViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -51,12 +56,17 @@ class PhotosFragment : Fragment(R.layout.fragment_photos),
         }
 
         binding.noImagesAlert.setContent {
+            val state by viewModel.state.collectAsState()
+
             MaterialTheme {
-                BackgroundAlert(R.drawable.ic_search_off, R.string.no_photos_found)
+                when(state) {
+                    is EmptySearch -> BackgroundAlert(R.drawable.ic_search_off, R.string.no_photos_found)
+                    is BadConnection -> BackgroundAlert(R.drawable.ic_bad_connection, R.string.bad_unsplash_connection)
+                    is NoInternet -> BackgroundAlert(R.drawable.ic_no_internet, R.string.no_internet)
+                    else -> Unit
+                }
             }
         }
-
-        observeState()
 
         return view
     }
@@ -65,23 +75,6 @@ class PhotosFragment : Fragment(R.layout.fragment_photos),
         lifecycleScope.launch {
             viewModel.photos.collect { value ->
                 photosAdapter.addPhotos(value)
-            }
-        }
-    }
-
-    private fun observeState() {
-        lifecycleScope.launch {
-            viewModel.state.collect { value ->
-                when (value) {
-                    is EmptySearch -> {
-                        // add observable for the EmptyListAlert and change the value here
-                        // (so i can change the message and image in EmptyListAlert on fly)
-                        binding.noImagesAlert.visibility = View.VISIBLE
-                    }
-                    else -> {
-                        binding.noImagesAlert.visibility = View.GONE
-                    }
-                }
             }
         }
     }

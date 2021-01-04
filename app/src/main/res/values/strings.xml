@@ -9,4 +9,6 @@
     <string name="photo_location_both">%1$s in %2$s</string>
     <string name="no_photos_found">No photos found️</string>
     <string name="no_collections_found">No collections found️</string>
+    <string name="bad_unsplash_connection">Unable to connect to UnSplash.com</string>
+    <string name="no_internet">No internet connection</string>
 </resources>

@@ -5,13 +5,16 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import eu.talich.data.source.CollectionsSource
+import eu.talich.data.source.InternetConnectionSource
 import eu.talich.data.source.PhotoSource
 import eu.talich.infrastructure.model.unsplash.mapper.*
 import eu.talich.infrastructure.network.unsplash.AuthorizationInterceptor
 import eu.talich.infrastructure.network.unsplash.UnsplashApi
 import eu.talich.infrastructure.source.CollectionsSourceImpl
+import eu.talich.infrastructure.source.InternetConnectionSourceImpl
 import eu.talich.infrastructure.source.PhotoSourceImpl
 import okhttp3.OkHttpClient
+import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -29,6 +32,7 @@ val infrastructureModule = module {
     factory { UserMapper() }
     factory<PhotoSource> { PhotoSourceImpl(get(), get(), get(), get()) }
     factory<CollectionsSource> { CollectionsSourceImpl(get(), get(), get(), get()) }
+    factory<InternetConnectionSource> { InternetConnectionSourceImpl(androidContext()) }
 
     factory {
         OkHttpClient.Builder()
