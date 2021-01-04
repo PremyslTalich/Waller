@@ -19,6 +19,7 @@ import eu.talich.waller.presentation.common.extension.loadPhoto
 import eu.talich.waller.presentation.common.extension.toPrettyString
 import eu.talich.waller.presentation.photodetail.ui.PhotoDetailCard
 import eu.talich.waller.presentation.photodetail.vm.PhotoDetailViewModel
+import eu.talich.domain.model.PhotoLocation
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -55,9 +56,24 @@ class PhotoDetailFragment : Fragment(R.layout.fragment_photo_detail) {
         (activity as AppCompatActivity).exitFullScreenMode()
     }
 
-    fun onLocationClick(lat: Float, lon: Float) {
+    fun onLocationClick(location: PhotoLocation) {
+        fun getUri(): String {
+            val hasGpsLocation = (location.latitude != null && location.longitude != null)
+            val hasCityAndCountry = (location.city != null && location.country != null)
+
+            return if (hasGpsLocation) {
+                "geo:${location.latitude},${location.longitude}?q=${location.latitude},${location.longitude}"
+            } else {
+                if (hasCityAndCountry) {
+                    "geo:0,0?q=${location.city}, ${location.country}"
+                } else {
+                    "geo:0,0?q=${location.city ?: location.country}"
+                }
+            }
+        }
+
         val intent = Intent(Intent.ACTION_VIEW).apply {
-            data = Uri.parse("geo:" + lat + "," + lon)
+            data = Uri.parse(getUri())
         }
         if (intent.resolveActivity(requireContext().getPackageManager()) != null) {
             startActivity(intent)

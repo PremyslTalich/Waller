@@ -65,7 +65,6 @@ class MainFragment : Fragment(R.layout.fragment_main), KoinComponent {
         }
 
         AlertDialog.Builder(requireActivity())
-//            .setTitle(R.string.search_dialog_title)
             .setView(view)
             .setOnDismissListener {
                 viewModel.setNewSearchQuery(searchQuery?.text.toString())

@@ -31,7 +31,7 @@ fun PhotoDetailCard(
     likes: Int,
     location: PhotoLocation,
     tags: List<String>,
-    onLocationClick: (lat: Float, lon: Float) -> Unit
+    onLocationClick: (location: PhotoLocation) -> Unit
 ) {
     val context = AmbientContext.current
 
@@ -60,7 +60,7 @@ fun PhotoDetailCard(
 }
 
 @Composable
-fun PhotoDetailCardLocation(context: Context, location: PhotoLocation, onLocationClick: (lat: Float, lon: Float) -> Unit) {
+fun PhotoDetailCardLocation(context: Context, location: PhotoLocation, onLocationClick: (location: PhotoLocation) -> Unit) {
     val address = with(location) {
         city?.let { city ->
             country?.let { country ->
@@ -82,7 +82,7 @@ fun PhotoDetailCardLocation(context: Context, location: PhotoLocation, onLocatio
     }
 
     if (address != null || gpsLocation != null) {
-        Row(modifier = Modifier.clickable(onClick = { onLocationClick(location.latitude!!, location.longitude!!) }).fillMaxWidth()) {
+        Row(modifier = Modifier.clickable(onClick = { onLocationClick(location) }).fillMaxWidth()) {
             Image(vectorResource(id = R.drawable.ic_globe), modifier = Modifier.width(20.dp).padding(start = 4.dp, top = 3.dp))
 
             Column {

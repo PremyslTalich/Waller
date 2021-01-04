@@ -1,6 +1,5 @@
 # Todo
 - Add "no more photos/collections" message for the user (at the end of pagination)
-- Remove clickable location on photo detail card when no gps location is available
 - Add loading notification fot the user
     - Loading more photos/collections
     - Loading HQ photo on photo detail (maybe user blurhash?)
@@ -10,6 +9,8 @@
 - Gradle to kotlin
 
 # Done
+- Remove clickable location on photo detail card when no gps location is available
+    - Changed the behaviour instead
 - Add "safe calling" the REST APIs and some kind of "result" for the UCs... now it just crashes when the user has no internet...
     - Done through exceptions... as it should be
 - Add "no internet" message for the user (no more crashes hopefully...)
