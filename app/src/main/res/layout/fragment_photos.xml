@@ -29,6 +29,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/loadingBar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="5dp" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

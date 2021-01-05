@@ -33,6 +33,9 @@ class PhotosViewModel(
     private val _state = MutableStateFlow<ViewState>(Init)
     val state: StateFlow<ViewState> = _state
 
+    private val _loadingBarState = MutableStateFlow<Boolean>(false)
+    val loadingBarState: StateFlow<Boolean> = _loadingBarState
+
     private var page: Int = 1
     private var searchQuery: String? = null
 
@@ -66,6 +69,8 @@ class PhotosViewModel(
 
     fun loadMorePhotos() {
         launch(Dispatchers.IO) {
+            _loadingBarState.value = true
+
             try {
                 val newPhotos = searchQuery?.let {
                     searchPhotosUseCase(it, page).results.map { photo ->
@@ -89,6 +94,8 @@ class PhotosViewModel(
             } catch (e: Exception) {
                 _state.value = BadConnection
             }
+
+            _loadingBarState.value = false
         }
     }
 

@@ -33,6 +33,9 @@ class CollectionsViewModel(
     private val _state = MutableStateFlow<ViewState>(Init)
     val state: StateFlow<ViewState> = _state
 
+    private val _loadingBarState = MutableStateFlow<Boolean>(false)
+    val loadingBarState: StateFlow<Boolean> = _loadingBarState
+
     private var page: Int = 1
     private var searchQuery: String? = null
 
@@ -53,6 +56,8 @@ class CollectionsViewModel(
 
     fun loadMoreCollections() {
         launch(Dispatchers.IO) {
+            _loadingBarState.value = true
+
             try {
                 val newCollections =
                     searchQuery?.let {
@@ -77,6 +82,8 @@ class CollectionsViewModel(
             } catch (e: Exception) {
                 _state.value = BadConnection
             }
+
+            _loadingBarState.value = false
         }
     }
 

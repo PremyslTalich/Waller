@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -16,6 +18,7 @@ import eu.talich.waller.presentation.collectiondetail.adapter.PhotosAdapter
 import eu.talich.waller.presentation.collectiondetail.vm.CollectionDetailViewModel
 import eu.talich.waller.presentation.common.adapter.InfiniteLoader
 import eu.talich.waller.presentation.common.extension.loadPhoto
+import eu.talich.waller.presentation.common.ui.LoadingBar
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -61,6 +64,14 @@ class CollectionDetailFragment : Fragment(R.layout.fragment_collection_detail), 
             viewModel.collection.coverPhoto?.let { photo ->
                 val args = CollectionDetailFragmentDirections.actionCollectionDetailFragmentToPhotoDetailFragment(photo)
                 it.findNavController().navigate(args)
+            }
+        }
+
+        binding.loadingBar.setContent {
+            val state by viewModel.loadingBarState.collectAsState()
+
+            if (state) {
+                LoadingBar()
             }
         }
 

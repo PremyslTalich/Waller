@@ -25,6 +25,9 @@ class CollectionDetailViewModel(
     private val _photos = MutableStateFlow<List<PhotoVo>>(listOf())
     val photos: StateFlow<List<PhotoVo>> = _photos
 
+    private val _loadingBarState = MutableStateFlow<Boolean>(false)
+    val loadingBarState: StateFlow<Boolean> = _loadingBarState
+
     var page: Int = 1
     var hasTransitionEnded: Boolean = false
 
@@ -34,6 +37,8 @@ class CollectionDetailViewModel(
 
     fun loadMoreCollectionPhotos() {
         launch(Dispatchers.IO) {
+            _loadingBarState.value = true
+
             val newPhotos = getCollectionPhotosUseCase(collection.id, page).map {
                 photoMapper.map(it)
             }.toMutableList()
@@ -46,6 +51,8 @@ class CollectionDetailViewModel(
                 _photos.value = newPhotos
                 page++
             }
+
+            _loadingBarState.value = false
         }
     }
 

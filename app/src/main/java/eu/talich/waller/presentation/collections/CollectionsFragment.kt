@@ -21,6 +21,7 @@ import eu.talich.waller.presentation.common.TabbedFragment
 import eu.talich.waller.presentation.common.adapter.ClearAdapter
 import eu.talich.waller.presentation.common.adapter.InfiniteLoader
 import eu.talich.waller.presentation.common.ui.BackgroundAlert
+import eu.talich.waller.presentation.common.ui.LoadingBar
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -59,6 +60,14 @@ class CollectionsFragment : Fragment(R.layout.fragment_collections), InfiniteLoa
                     is NoInternet -> BackgroundAlert(R.drawable.ic_no_internet, R.string.no_internet)
                     else -> Unit
                 }
+            }
+        }
+
+        binding.loadingBar.setContent {
+            val state by viewModel.loadingBarState.collectAsState()
+
+            if (state) {
+                LoadingBar()
             }
         }
 

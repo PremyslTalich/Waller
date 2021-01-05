@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -16,6 +17,7 @@ import eu.talich.waller.presentation.common.TabbedFragment
 import eu.talich.waller.presentation.common.adapter.ClearAdapter
 import eu.talich.waller.presentation.common.adapter.InfiniteLoader
 import eu.talich.waller.presentation.common.ui.BackgroundAlert
+import eu.talich.waller.presentation.common.ui.LoadingBar
 import eu.talich.waller.presentation.photos.adapter.PhotosAdapter
 import eu.talich.waller.presentation.photos.vm.BadConnection
 import eu.talich.waller.presentation.photos.vm.EmptySearch
@@ -65,6 +67,14 @@ class PhotosFragment : Fragment(R.layout.fragment_photos),
                     is NoInternet -> BackgroundAlert(R.drawable.ic_no_internet, R.string.no_internet)
                     else -> Unit
                 }
+            }
+        }
+
+        binding.loadingBar.setContent {
+            val state by viewModel.loadingBarState.collectAsState()
+
+            if (state) {
+                LoadingBar()
             }
         }
 
