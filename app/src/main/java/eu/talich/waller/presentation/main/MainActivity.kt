@@ -3,6 +3,7 @@ package eu.talich.waller.presentation.main
 import android.os.Bundle
 import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
+import eu.talich.waller.R
 import eu.talich.waller.databinding.ActivityMainBinding
 import eu.talich.waller.presentation.main.vm.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -14,6 +15,9 @@ class MainActivity: AppCompatActivity(), KoinComponent {
     private val viewModel by viewModel<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Remove splash theme
+        setTheme(R.style.AppTheme)
+
         super.onCreate(savedInstanceState)
 
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
