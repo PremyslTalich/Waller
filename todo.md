@@ -1,5 +1,4 @@
 # Todo
-- Add BackgroundAlerts etc. to collection detail screen
 - Add "no more photos/collections" message for the user (at the end of pagination)
 - Loading HQ photo on photo detail (maybe user blurhash?)
 - Add auto open/close keyboard when opening/closing the search dialog
@@ -8,6 +7,7 @@
 - Gradle to kotlin
 
 # Done
+- Add BackgroundAlerts etc. to collection detail screen
 - Add proper splash screen
 - Add loading notification fot the user
     - Loading more photos/collections

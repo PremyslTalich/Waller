@@ -16,9 +16,13 @@ import eu.talich.waller.R
 import eu.talich.waller.databinding.FragmentCollectionDetailBinding
 import eu.talich.waller.presentation.collectiondetail.adapter.PhotosAdapter
 import eu.talich.waller.presentation.collectiondetail.vm.CollectionDetailViewModel
+import eu.talich.waller.presentation.collectiondetail.vm.None
+import eu.talich.waller.presentation.collectiondetail.vm.BadConnection
+import eu.talich.waller.presentation.collectiondetail.vm.NoInternet
 import eu.talich.waller.presentation.common.adapter.InfiniteLoader
 import eu.talich.waller.presentation.common.extension.loadPhoto
 import eu.talich.waller.presentation.common.ui.LoadingBar
+import eu.talich.waller.presentation.common.ui.AlertRibbon
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -68,10 +72,20 @@ class CollectionDetailFragment : Fragment(R.layout.fragment_collection_detail), 
         }
 
         binding.loadingBar.setContent {
-            val state by viewModel.loadingBarState.collectAsState()
+            val loadingState by viewModel.loadingBarState.collectAsState()
 
-            if (state) {
+            if (loadingState) {
                 LoadingBar()
+            }
+        }
+
+        binding.alertRibbon.setContent {
+            val alertState by viewModel.alertState.collectAsState()
+
+            when (alertState) {
+                None -> Unit
+                BadConnection -> AlertRibbon(getString(R.string.bad_unsplash_connection))
+                NoInternet -> AlertRibbon(getString(R.string.no_internet))
             }
         }
 

@@ -36,8 +36,8 @@ val presentationModule = module {
     }
     viewModel { (photo: PhotoVo) -> PhotoDetailViewModel(get(), get(), photo) }
     viewModel { (clearAdapter: ClearAdapter) -> PhotosViewModel(get(), get(), get(), get(), get(), clearAdapter) }
-    viewModel { (clearAdapter: ClearAdapter) -> CollectionsViewModel(get(), get(), get(), get(), clearAdapter) }
-    viewModel { (collection: CollectionVo) -> CollectionDetailViewModel(get(), collection, get()) }
+    viewModel { (clearAdapter: ClearAdapter) -> CollectionsViewModel(get(), get(), get(), get(), get(), clearAdapter) }
+    viewModel { (collection: CollectionVo) -> CollectionDetailViewModel(get(), get(), collection, get()) }
 
     factory { PhotoMapper() }
     factory { PhotoDetailMapper() }

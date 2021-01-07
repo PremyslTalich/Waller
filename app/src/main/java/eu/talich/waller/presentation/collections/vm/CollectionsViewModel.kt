@@ -3,6 +3,7 @@ package eu.talich.waller.presentation.collections.vm
 import androidx.lifecycle.ViewModel
 import eu.talich.domain.usecase.GetFeaturedCollectionsUseCase
 import eu.talich.domain.usecase.GetSearchQueryUseCase
+import eu.talich.domain.usecase.ObserveInternetConnectionUseCase
 import eu.talich.domain.usecase.SearchCollectionsUseCase
 import eu.talich.waller.presentation.common.adapter.ClearAdapter
 import eu.talich.waller.presentation.common.mapper.CollectionMapper
@@ -21,6 +22,7 @@ class CollectionsViewModel(
     private val searchCollectionsUseCase: SearchCollectionsUseCase,
     private val collectionMapper: CollectionMapper,
     private val getSearchQueryUseCase: GetSearchQueryUseCase,
+    private val observeInternetConnectionUseCase: ObserveInternetConnectionUseCase,
     private val clearAdapter: ClearAdapter
 ): ViewModel(), CoroutineScope {
     private val job = SupervisorJob()
@@ -30,8 +32,8 @@ class CollectionsViewModel(
     private val _collections = MutableStateFlow<List<CollectionVo>>(listOf())
     val collections: StateFlow<List<CollectionVo>> = _collections
 
-    private val _state = MutableStateFlow<ViewState>(Init)
-    val state: StateFlow<ViewState> = _state
+    private val _alertState = MutableStateFlow<AlertState>(None)
+    val alertState: StateFlow<AlertState> = _alertState
 
     private val _loadingBarState = MutableStateFlow<Boolean>(false)
     val loadingBarState: StateFlow<Boolean> = _loadingBarState
@@ -50,6 +52,16 @@ class CollectionsViewModel(
                 searchQuery = it
                 _collections.value = emptyList()
                 loadMoreCollections()
+            }
+        }
+
+        launch {
+            observeInternetConnectionUseCase().collect { hasInternetConnection ->
+                if (hasInternetConnection) {
+                    _alertState.value = None
+                } else {
+                    _alertState.value = NoInternet
+                }
             }
         }
     }
@@ -72,15 +84,14 @@ class CollectionsViewModel(
 
                 if (newCollections.isNotEmpty()) {
                     _collections.value = newCollections
-                    _state.value = HasCollections
                     page++
                 } else {
                     if (searchQuery != null && page == 1) {
-                        _state.value = EmptySearch
+                        _alertState.value = EmptySearch
                     }
                 }
             } catch (e: Exception) {
-                _state.value = BadConnection
+                _alertState.value = BadConnection
             }
 
             _loadingBarState.value = false

@@ -20,6 +20,7 @@ import eu.talich.waller.presentation.collections.vm.NoInternet
 import eu.talich.waller.presentation.common.TabbedFragment
 import eu.talich.waller.presentation.common.adapter.ClearAdapter
 import eu.talich.waller.presentation.common.adapter.InfiniteLoader
+import eu.talich.waller.presentation.common.ui.AlertRibbon
 import eu.talich.waller.presentation.common.ui.BackgroundAlert
 import eu.talich.waller.presentation.common.ui.LoadingBar
 import kotlinx.coroutines.flow.collect
@@ -51,13 +52,22 @@ class CollectionsFragment : Fragment(R.layout.fragment_collections), InfiniteLoa
         }
 
         binding.noCollectionsAlert.setContent {
-            val state by viewModel.state.collectAsState()
+            val state by viewModel.alertState.collectAsState()
+
+            if (state == EmptySearch) {
+                MaterialTheme {
+                    BackgroundAlert(R.drawable.ic_search_off, R.string.no_collections_found)
+                }
+            }
+        }
+
+        binding.alertRibbon.setContent {
+            val state by viewModel.alertState.collectAsState()
 
             MaterialTheme {
                 when(state) {
-                    is EmptySearch -> BackgroundAlert(R.drawable.ic_search_off, R.string.no_collections_found)
-                    is BadConnection -> BackgroundAlert(R.drawable.ic_bad_connection, R.string.bad_unsplash_connection)
-                    is NoInternet -> BackgroundAlert(R.drawable.ic_no_internet, R.string.no_internet)
+                    is BadConnection -> AlertRibbon(getString(R.string.bad_unsplash_connection))
+                    is NoInternet -> AlertRibbon(getString(R.string.no_internet))
                     else -> Unit
                 }
             }

@@ -30,8 +30,8 @@ class PhotosViewModel(
     private val _photos = MutableStateFlow<List<PhotoVo>>(listOf())
     val photos: StateFlow<List<PhotoVo>> = _photos
 
-    private val _state = MutableStateFlow<ViewState>(Init)
-    val state: StateFlow<ViewState> = _state
+    private val _alertState = MutableStateFlow<AlertState>(None)
+    val alertState: StateFlow<AlertState> = _alertState
 
     private val _loadingBarState = MutableStateFlow<Boolean>(false)
     val loadingBarState: StateFlow<Boolean> = _loadingBarState
@@ -56,12 +56,9 @@ class PhotosViewModel(
         launch {
             observeInternetConnectionUseCase().collect { hasInternetConnection ->
                 if (hasInternetConnection) {
-                    loadMorePhotos()
+                    _alertState.value = None
                 } else {
-                    clearAdapter.clearAdapter()
-                    page = 1
-
-                    _state.value = NoInternet
+                    _alertState.value = NoInternet
                 }
             }
         }
@@ -84,15 +81,14 @@ class PhotosViewModel(
 
                 if (newPhotos.isNotEmpty()) {
                     _photos.value = newPhotos
-                    _state.value = HasPhotos
                     page++
                 } else {
                     if (searchQuery != null && page == 1) {
-                        _state.value = EmptySearch
+                        _alertState.value = EmptySearch
                     }
                 }
             } catch (e: Exception) {
-                _state.value = BadConnection
+                _alertState.value = BadConnection
             }
 
             _loadingBarState.value = false

@@ -45,4 +45,12 @@
         android:layout_width="match_parent"
         android:layout_height="5dp" />
 
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/alertRibbon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </androidx.constraintlayout.motion.widget.MotionLayout>
