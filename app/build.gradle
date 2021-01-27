@@ -108,4 +108,11 @@ dependencies {
 
     // PhotoView
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+
+    // Coil
+    implementation 'io.coil-kt:coil:1.1.1'
+    implementation 'dev.chrisbanes.accompanist:accompanist-coil:0.4.2'
+
+    // BlurHash
+    implementation 'com.github.woltapp:blurhash:539cf8a5425d766227b52e1d487a231bc5c7b72e'
 }

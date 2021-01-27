@@ -4,108 +4,121 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.material.LinearProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Surface
+import androidx.compose.runtime.onActive
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.navigation.findNavController
 import eu.talich.waller.R
-import eu.talich.waller.databinding.FragmentPhotosBinding
 import eu.talich.waller.presentation.common.TabbedFragment
-import eu.talich.waller.presentation.common.adapter.ClearAdapter
-import eu.talich.waller.presentation.common.adapter.InfiniteLoader
 import eu.talich.waller.presentation.common.ui.AlertRibbon
 import eu.talich.waller.presentation.common.ui.BackgroundAlert
 import eu.talich.waller.presentation.common.ui.LoadingBar
-import eu.talich.waller.presentation.photos.adapter.PhotosAdapter
-import eu.talich.waller.presentation.photos.vm.BadConnection
-import eu.talich.waller.presentation.photos.vm.EmptySearch
-import eu.talich.waller.presentation.photos.vm.NoInternet
-import eu.talich.waller.presentation.photos.vm.PhotosViewModel
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import eu.talich.waller.presentation.main.MainFragmentDirections
+import eu.talich.waller.presentation.photos.ui.PhotoCard
+import eu.talich.waller.presentation.photos.vm.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 
-class PhotosFragment : Fragment(R.layout.fragment_photos),
-    InfiniteLoader, TabbedFragment, ClearAdapter {
+class PhotosFragment : Fragment(), TabbedFragment {
 
     override val title: Int
         get() = R.string.photos_title
 
-    private lateinit var binding: FragmentPhotosBinding
-    private val viewModel: PhotosViewModel by viewModel { parametersOf(this) }
-
-    private val photosAdapter = PhotosAdapter(mutableListOf(), this)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        observePhotos()
-    }
+    private val viewModel by viewModel<PhotosViewModel>()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentPhotosBinding.inflate(inflater, container, false)
-        val view = binding.root
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        return ComposeView(requireContext()).apply {
+            setContent {
+                val photos = viewModel.photos.value
+                val photosLastIndex = photos.lastIndex
+                val loadingState = viewModel.loadingState.value
+                val alertState = viewModel.alertState.value
 
-        binding.images.apply {
-            layoutManager = LinearLayoutManager(view.context)
-            adapter = photosAdapter
-        }
+                ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+                    val (photosContainer, backgroundAlert, ribbonAlert) = createRefs()
 
-        binding.noImagesAlert.setContent {
-            val state by viewModel.alertState.collectAsState()
+                    if (photos.isNotEmpty()) {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .constrainAs(photosContainer) {
+                                    top.linkTo(parent.top)
+                                    bottom.linkTo(parent.bottom)
+                                    start.linkTo(parent.start)
+                                    end.linkTo(parent.end)
+                                }
+                        ) {
+                            itemsIndexed(photos) { index, photo ->
+                                PhotoCard(photo) {
+                                    findNavController().navigate(
+                                        MainFragmentDirections
+                                            .actionMainFragmentToPhotoDetailFragment(it)
+                                    )
+                                }
 
-            if (state == EmptySearch) {
-                MaterialTheme {
-                    BackgroundAlert(R.drawable.ic_search_off, R.string.no_photos_found)
+                                if (index == photosLastIndex && !loadingState) {
+                                    onActive {
+                                        viewModel.loadMorePhotos()
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    when(alertState) {
+                        EmptySearch -> {
+                            Surface(
+                                modifier = Modifier.constrainAs(
+                                    backgroundAlert
+                                ) {
+                                    top.linkTo(parent.top)
+                                    bottom.linkTo(parent.bottom)
+                                    start.linkTo(parent.start)
+                                    end.linkTo(parent.end)
+                                }) {
+                                BackgroundAlert(
+                                    R.drawable.ic_search_off,
+                                    R.string.no_photos_found
+                                )
+                            }
+                        }
+                        BadConnection -> {
+                            Surface(modifier = Modifier.constrainAs(ribbonAlert) {
+                                bottom.linkTo(parent.bottom)
+                                start.linkTo(parent.start)
+                                end.linkTo(parent.end)
+                            }) {
+                                AlertRibbon(getString(R.string.bad_unsplash_connection))
+                            }
+                        }
+                        NoInternet -> {
+                            Surface(modifier = Modifier.constrainAs(ribbonAlert) {
+                                bottom.linkTo(parent.bottom)
+                                start.linkTo(parent.start)
+                                end.linkTo(parent.end)
+                            }) {
+                                AlertRibbon(getString(R.string.no_internet))
+                            }
+                        }
+                        None -> Unit
+                    }
+
+                    if (loadingState) {
+                        Surface(modifier = Modifier.constrainAs(ribbonAlert) {
+                            bottom.linkTo(parent.bottom)
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                        }) {
+                            LoadingBar()
+                        }
+                    }
                 }
             }
-        }
-
-        binding.alertRibbon.setContent {
-            val state by viewModel.alertState.collectAsState()
-
-            MaterialTheme {
-                when(state) {
-                    is BadConnection -> AlertRibbon(getString(R.string.bad_unsplash_connection))
-                    is NoInternet -> AlertRibbon(getString(R.string.no_internet))
-                    else -> Unit
-                }
-            }
-        }
-
-        binding.loadingBar.setContent {
-            val state by viewModel.loadingBarState.collectAsState()
-
-            if (state) {
-                LoadingBar()
-            }
-        }
-
-        return view
-    }
-
-    private fun observePhotos() {
-        lifecycleScope.launch {
-            viewModel.photos.collect { value ->
-                photosAdapter.addPhotos(value)
-            }
-        }
-    }
-
-    override fun loadMore() {
-        viewModel.loadMorePhotos()
-    }
-
-    override fun clearAdapter() {
-        requireActivity().runOnUiThread {
-            photosAdapter.removePhotos()
         }
     }
 }

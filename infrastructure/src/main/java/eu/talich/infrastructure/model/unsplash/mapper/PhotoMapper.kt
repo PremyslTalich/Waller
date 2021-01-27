@@ -8,19 +8,22 @@ import eu.talich.domain.model.mapper.Mapper
 class PhotoMapper:
     Mapper<PhotoDto, Photo> {
     override fun map(from: PhotoDto): Photo {
-        return Photo(
-            from.id,
-            from.description,
-            from.width,
-            from.height,
-            from.color,
-            PhotoUrls(
-                from.urls?.raw,
-                from.urls?.full,
-                from.urls?.regular,
-                from.urls?.small,
-                from.urls?.thumb
+        return with(from) {
+            Photo(
+                id,
+                description,
+                width,
+                height,
+                color,
+                PhotoUrls(
+                    urls?.raw,
+                    urls?.full,
+                    urls?.regular,
+                    urls?.small,
+                    urls?.thumb
+                ),
+                blurHash
             )
-        )
+        }
     }
 }

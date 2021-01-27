@@ -5,12 +5,10 @@ import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import eu.talich.waller.databinding.CollectionsItemCollectionBinding
-import eu.talich.waller.databinding.PhotosItemImageBinding
-import eu.talich.waller.presentation.common.model.CollectionVo
 import eu.talich.waller.presentation.collections.vh.CollectionViewHolder
-import eu.talich.waller.presentation.main.MainFragmentDirections
 import eu.talich.waller.presentation.common.adapter.InfiniteLoader
-import eu.talich.waller.presentation.photos.vh.PhotoViewHolder
+import eu.talich.waller.presentation.common.model.CollectionVo
+import eu.talich.waller.presentation.main.MainFragmentDirections
 
 class CollectionsAdapter(
     private var collections: MutableList<CollectionVo>,

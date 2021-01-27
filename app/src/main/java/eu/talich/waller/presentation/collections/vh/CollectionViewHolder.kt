@@ -10,8 +10,8 @@ class CollectionViewHolder(private val binding: CollectionsItemCollectionBinding
         binding.title.text = collectionVo.title
         binding.totalPhotos.text = collectionVo.totalPhotos.toString()
 
-        collectionVo.coverPhoto?.smallUrl?.let { it ->
-            binding.coverPhoto.loadPhoto(it)
+        collectionVo.coverPhoto?.let { it ->
+            binding.coverPhoto.loadPhoto(it.thumbnail.rawUrl)
         }
     }
 }

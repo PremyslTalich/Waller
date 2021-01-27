@@ -16,7 +16,6 @@ import eu.talich.waller.databinding.FragmentPhotoDetailBinding
 import eu.talich.waller.presentation.common.extension.enterFullScreenMode
 import eu.talich.waller.presentation.common.extension.exitFullScreenMode
 import eu.talich.waller.presentation.common.extension.loadPhoto
-import eu.talich.waller.presentation.common.extension.toPrettyString
 import eu.talich.waller.presentation.photodetail.ui.PhotoDetailCard
 import eu.talich.waller.presentation.photodetail.vm.PhotoDetailViewModel
 import eu.talich.domain.model.PhotoLocation
@@ -42,7 +41,7 @@ class PhotoDetailFragment : Fragment(R.layout.fragment_photo_detail) {
         val view = binding.root
 
         // TODO pořešit ten double bang!!
-        binding.photo.loadPhoto(viewModel.photo.fullUrl!!)
+        binding.photo.loadPhoto(viewModel.photo.fullSizeUrl)
         binding.photo.maximumScale = 5f
 
         observePhotoDetail()

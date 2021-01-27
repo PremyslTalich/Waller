@@ -39,11 +39,11 @@ class PhotoDetailMapper(
                 },
                 userMapper.map(user),
                 PhotoUrls(
-                    urls?.raw,
-                    urls?.full,
-                    urls?.regular,
-                    urls?.small,
-                    urls?.thumb
+                    urls.raw,
+                    urls.full,
+                    urls.regular,
+                    urls.small,
+                    urls.thumb
                 ),
             )
         }

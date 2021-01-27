@@ -8,7 +8,8 @@ data class PhotoVo(
     val width: Int,
     val height: Int,
     val color: String,
-    val smallUrl: String?,
-    val downloadUrl: String?,
-    val fullUrl: String?
+    val downloadUrl: String,
+    val fullSizeUrl: String,
+    val blurHash: BlurHashVo?,
+    val thumbnail: ThumbnailVo
 ) : Serializable

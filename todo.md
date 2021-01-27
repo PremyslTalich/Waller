@@ -7,6 +7,7 @@
 - Gradle to kotlin
 
 # Done
+- Photos refactored to compose
 - Add BackgroundAlerts etc. to collection detail screen
 - Add proper splash screen
 - Add loading notification fot the user

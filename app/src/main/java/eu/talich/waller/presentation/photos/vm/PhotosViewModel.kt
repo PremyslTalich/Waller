@@ -1,18 +1,20 @@
 package eu.talich.waller.presentation.photos.vm
 
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import eu.talich.domain.usecase.GetPhotosUseCase
 import eu.talich.domain.usecase.GetSearchQueryUseCase
 import eu.talich.domain.usecase.ObserveInternetConnectionUseCase
 import eu.talich.domain.usecase.SearchPhotosUseCase
-import eu.talich.waller.presentation.common.adapter.ClearAdapter
 import eu.talich.waller.presentation.common.mapper.PhotoMapper
 import eu.talich.waller.presentation.common.model.PhotoVo
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
-import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
 class PhotosViewModel(
@@ -20,21 +22,12 @@ class PhotosViewModel(
     private val searchPhotosUseCase: SearchPhotosUseCase,
     private val getSearchQueryUseCase: GetSearchQueryUseCase,
     private val observeInternetConnectionUseCase: ObserveInternetConnectionUseCase,
-    private val photoMapper: PhotoMapper,
-    private val clearAdapter: ClearAdapter
-): ViewModel(), CoroutineScope {
-    private val job = SupervisorJob()
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.IO + job
+    private val photoMapper: PhotoMapper
+): ViewModel() {
 
-    private val _photos = MutableStateFlow<List<PhotoVo>>(listOf())
-    val photos: StateFlow<List<PhotoVo>> = _photos
-
-    private val _alertState = MutableStateFlow<AlertState>(None)
-    val alertState: StateFlow<AlertState> = _alertState
-
-    private val _loadingBarState = MutableStateFlow<Boolean>(false)
-    val loadingBarState: StateFlow<Boolean> = _loadingBarState
+    val loadingState: MutableState<Boolean> = mutableStateOf(false)
+    val photos: MutableState<List<PhotoVo>> = mutableStateOf(emptyList())
+    val alertState: MutableState<AlertState> = mutableStateOf(None)
 
     private var page: Int = 1
     private var searchQuery: String? = null
@@ -42,32 +35,28 @@ class PhotosViewModel(
     init {
         loadMorePhotos()
 
-        launch {
+        viewModelScope.launch(Dispatchers.IO) {
             getSearchQueryUseCase().collect {
-                clearAdapter.clearAdapter()
-
                 page = 1
                 searchQuery = it
-                _photos.value = emptyList()
+                photos.value = emptyList()
                 loadMorePhotos()
             }
-        }
 
-        launch {
             observeInternetConnectionUseCase().collect { hasInternetConnection ->
                 if (hasInternetConnection) {
-                    _alertState.value = None
+                    alertState.value = None
                 } else {
-                    _alertState.value = NoInternet
+                    alertState.value = NoInternet
                 }
             }
         }
     }
 
     fun loadMorePhotos() {
-        launch(Dispatchers.IO) {
-            _loadingBarState.value = true
+        loadingState.value = true
 
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val newPhotos = searchQuery?.let {
                     searchPhotosUseCase(it, page).results.map { photo ->
@@ -80,23 +69,23 @@ class PhotosViewModel(
                 }
 
                 if (newPhotos.isNotEmpty()) {
-                    _photos.value = newPhotos
+                    photos.value += newPhotos
                     page++
+                    alertState.value = None
                 } else {
                     if (searchQuery != null && page == 1) {
-                        _alertState.value = EmptySearch
+                        alertState.value = EmptySearch
                     }
                 }
             } catch (e: Exception) {
-                _alertState.value = BadConnection
+                println("Exception = $e")
+
+                if (alertState.value != NoInternet) {
+                    alertState.value = BadConnection
+                }
             }
 
-            _loadingBarState.value = false
+            loadingState.value = false
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        job.cancel()
     }
 }

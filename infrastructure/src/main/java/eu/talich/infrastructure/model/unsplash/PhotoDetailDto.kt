@@ -17,5 +17,5 @@ data class PhotoDetailDto (
     val location: PhotoLocationDto,
     val tags: List<TagDto>,
     val user: UserDto,
-    val urls: PhotoUrlsDto?
+    val urls: PhotoUrlsDto
 )

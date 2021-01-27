@@ -55,8 +55,8 @@ class CollectionDetailFragment : Fragment(R.layout.fragment_collection_detail), 
             binding.description.text = viewModel.collection.title
         }
 
-        viewModel.collection.coverPhoto?.smallUrl?.let {
-            binding.coverPhoto.loadPhoto(it)
+        viewModel.collection.coverPhoto?.let {
+            binding.coverPhoto.loadPhoto(it.thumbnail.rawUrl)
         }
 
         binding.photos.apply {

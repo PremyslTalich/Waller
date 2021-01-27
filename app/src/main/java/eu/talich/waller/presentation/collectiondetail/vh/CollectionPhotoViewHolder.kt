@@ -15,8 +15,6 @@ class CollectionPhotoViewHolder(private val binding: PhotosItemImageBinding): Re
             binding.description.visibility = View.GONE
         }
 
-        photoVo.smallUrl?.let { it ->
-            binding.image.loadPhoto(it, photoVo.color)
-        }
+        binding.image.loadPhoto(photoVo.thumbnail.rawUrl, photoVo.color)
     }
 }

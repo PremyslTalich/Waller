@@ -6,5 +6,6 @@ data class Photo(
     val width: Int,
     val height: Int,
     val color: String,
-    val urls: PhotoUrls?
+    val urls: PhotoUrls,
+    val blurHash: String?
 )
