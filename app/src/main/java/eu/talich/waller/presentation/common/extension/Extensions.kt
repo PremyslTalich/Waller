@@ -2,18 +2,29 @@ package eu.talich.waller.presentation.common.extension
 
 import android.annotation.SuppressLint
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.view.View.*
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.wolt.blurhashkt.BlurHashDecoder
+import eu.talich.waller.presentation.common.model.BlurHashVo
 import java.text.SimpleDateFormat
 import java.util.*
 
-fun ImageView.loadPhoto(url: String, color: String? = null) {
-    val placeholderColor = color?.let {
-        ColorDrawable(Color.parseColor(color))
-    }
+fun ImageView.loadPhoto(url: String, color: String? = null, blurHash: BlurHashVo? = null) {
+    val placeholderColor =
+        blurHash?.let {
+            BitmapDrawable(
+                this.resources,
+                BlurHashDecoder.decode(it.hash, it.width, it.height)
+            )
+        } ?: run {
+            color?.let {
+                ColorDrawable(Color.parseColor(color))
+            }
+        }
 
     Glide.with(this.context)
         .load(url)

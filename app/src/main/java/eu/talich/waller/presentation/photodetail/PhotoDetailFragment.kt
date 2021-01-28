@@ -40,8 +40,11 @@ class PhotoDetailFragment : Fragment(R.layout.fragment_photo_detail) {
 
         val view = binding.root
 
-        // TODO pořešit ten double bang!!
-        binding.photo.loadPhoto(viewModel.photo.fullSizeUrl)
+        binding.photo.loadPhoto(
+            url = viewModel.photo.fullSizeUrl,
+            color = viewModel.photo.color,
+            blurHash = viewModel.photo.blurHash
+        )
         binding.photo.maximumScale = 5f
 
         observePhotoDetail()

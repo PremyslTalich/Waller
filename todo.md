@@ -1,12 +1,12 @@
 # Todo
 - Add "no more photos/collections" message for the user (at the end of pagination)
-- Loading HQ photo on photo detail (maybe user blurhash?)
 - Add auto open/close keyboard when opening/closing the search dialog
 - Add clickable tags on photo detail info card, so user can easily search by tags on photo
 - Add context menu on collection detail screen with options like "use this collection for autowaller etc."
 - Gradle to kotlin
 
 # Done
+- Loading HQ photo on photo detail (maybe use a blurhash?)
 - Photos refactored to compose
 - Add BackgroundAlerts etc. to collection detail screen
 - Add proper splash screen
