@@ -1,4 +1,6 @@
 # Todo
+- Refactor architecture
+- Add Users and User detail screens
 - Add "no more photos/collections" message for the user (at the end of pagination)
 - Add auto open/close keyboard when opening/closing the search dialog
 - Add clickable tags on photo detail info card, so user can easily search by tags on photo
