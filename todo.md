@@ -1,4 +1,5 @@
 # Todo
+- Remember scroll position on Photos screen
 - Refactor architecture
 - Add Users and User detail screens
 - Add "no more photos/collections" message for the user (at the end of pagination)
