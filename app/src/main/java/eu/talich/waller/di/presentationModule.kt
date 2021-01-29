@@ -34,7 +34,7 @@ val presentationModule = module {
             get()
         )
     }
-    viewModel { (photo: PhotoVo) -> PhotoDetailViewModel(get(), get(), photo) }
+    viewModel { (photo: PhotoVo) -> PhotoDetailViewModel(get(), get(), get(), photo) }
 //    viewModel { (clearAdapter: ClearAdapter) -> PhotosViewModel(get(), get(), get(), get(), get(), clearAdapter) }
     viewModel { PhotosViewModel(get(), get(), get(), get(), get()) }
     viewModel { (clearAdapter: ClearAdapter) -> CollectionsViewModel(get(), get(), get(), get(), get(), clearAdapter) }

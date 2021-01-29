@@ -2,6 +2,7 @@ package eu.talich.waller.presentation.photodetail.ui
 
 import android.content.Context
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
@@ -19,10 +20,12 @@ import eu.talich.domain.model.PhotoLocation
 import eu.talich.domain.model.User
 import eu.talich.waller.R
 import eu.talich.waller.presentation.common.extension.toPrettyString
+import eu.talich.waller.presentation.common.ui.Tag
+import eu.talich.waller.presentation.common.ui.TagRow
+import eu.talich.waller.presentation.common.ui.defaultGray
 import java.util.*
 
-val defaultGray = Color(117,117,117)
-
+@ExperimentalLayout
 @Composable
 fun PhotoDetailCard(
     user: User,
@@ -31,7 +34,8 @@ fun PhotoDetailCard(
     likes: Int,
     location: PhotoLocation,
     tags: List<String>,
-    onLocationClick: (location: PhotoLocation) -> Unit
+    onLocationClick: (location: PhotoLocation) -> Unit,
+    onTagClick: (id: String) -> Unit
 ) {
     val context = AmbientContext.current
 
@@ -54,7 +58,13 @@ fun PhotoDetailCard(
         PhotoDetailCardLocation(context, location, onLocationClick)
 
         if (tags.isNotEmpty()) {
-            Text(text = tags.joinToString(), fontSize = TextUnit.Sp(14), fontStyle = FontStyle.Italic, color = defaultGray, modifier = Modifier.padding(top = 24.dp))
+            ScrollableColumn(
+                modifier = Modifier
+                    .padding(top = 10.dp)
+                    .heightIn(max = 60.dp)
+            ) {
+                TagRow(tags = tags.map { Tag(it, it) }, onTagClick)
+            }
         }
     }
 }

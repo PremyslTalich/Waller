@@ -7,7 +7,7 @@ import eu.talich.waller.R
 import eu.talich.waller.databinding.ActivityMainBinding
 import eu.talich.waller.presentation.main.vm.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.KoinComponent
+import org.koin.core.component.KoinComponent
 
 class MainActivity: AppCompatActivity(), KoinComponent {
     private lateinit var binding: ActivityMainBinding
@@ -20,7 +20,7 @@ class MainActivity: AppCompatActivity(), KoinComponent {
 
         super.onCreate(savedInstanceState)
 
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root

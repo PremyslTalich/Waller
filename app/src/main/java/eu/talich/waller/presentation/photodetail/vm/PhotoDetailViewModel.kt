@@ -2,6 +2,7 @@ package eu.talich.waller.presentation.photodetail.vm
 
 import androidx.lifecycle.ViewModel
 import eu.talich.domain.usecase.GetPhotoDetailUseCase
+import eu.talich.domain.usecase.SetSearchQueryUseCase
 import eu.talich.waller.presentation.common.mapper.PhotoDetailMapper
 import eu.talich.waller.presentation.common.model.PhotoDetailVo
 import eu.talich.waller.presentation.common.model.PhotoVo
@@ -14,6 +15,7 @@ import kotlin.coroutines.CoroutineContext
 class PhotoDetailViewModel(
     private val getPhotoDetailUseCase: GetPhotoDetailUseCase,
     private val photoDetailMapper: PhotoDetailMapper,
+    private val setSearchQueryUseCase: SetSearchQueryUseCase,
     val photo: PhotoVo
 ): ViewModel(), CoroutineScope {
     private val job = SupervisorJob()
@@ -33,6 +35,18 @@ class PhotoDetailViewModel(
         _photoDetail.value = photoDetailMapper.map(
             getPhotoDetailUseCase(photoId)
         )
+    }
+
+    fun setNewSearchQuery(newSearchQuery: String) {
+        launch {
+            setSearchQueryUseCase(
+                if (newSearchQuery.isBlank()) {
+                    null
+                } else {
+                    newSearchQuery
+                }
+            )
+        }
     }
 
     override fun onCleared() {

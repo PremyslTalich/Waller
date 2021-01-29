@@ -17,7 +17,7 @@ import eu.talich.waller.databinding.FragmentMainBinding
 import eu.talich.waller.presentation.main.adapter.MainPagerAdapter
 import eu.talich.waller.presentation.main.vm.MainFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.KoinComponent
+import org.koin.core.component.KoinComponent
 
 
 class MainFragment : Fragment(R.layout.fragment_main), KoinComponent {

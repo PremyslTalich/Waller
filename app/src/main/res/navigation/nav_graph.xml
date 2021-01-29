@@ -40,5 +40,8 @@
         <argument
             android:name="photo"
             app:argType="eu.talich.waller.presentation.common.model.PhotoVo" />
+
+        <action android:id="@+id/action_photoDetailFragment_to_mainFragment"
+            app:popUpTo="@id/mainFragment" />
     </fragment>
 </navigation>
