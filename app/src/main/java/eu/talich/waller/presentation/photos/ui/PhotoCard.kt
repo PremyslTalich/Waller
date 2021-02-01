@@ -1,7 +1,6 @@
 package eu.talich.waller.presentation.photos.ui
 
 import android.graphics.Bitmap
-import android.graphics.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -53,34 +52,13 @@ fun PhotoCard(photo: PhotoVo, onClick: (photo: PhotoVo) -> Unit) {
                         .fillMaxWidth()
                         .wrapContentHeight(),
                     loading = {
-//                        val placeholderBitmap =
-//                            photo.blurHash?.let {
-//                                BlurHashDecoder.decode(it.hash, it.width, it.height)?.asImageBitmap()
-//                            } ?: run {
-//                                val colorBitmap = Bitmap.createBitmap(
-//                                    photo.thumbnail.width,
-//                                    photo.thumbnail.height,
-//                                    Bitmap.Config.ARGB_8888
-//                                )
-//
-//                                Canvas(colorBitmap).drawColor(
-//                                    android.graphics.Color.parseColor(photo.color)
-//                                )
-//
-//                                colorBitmap.asImageBitmap()
-//                            }
-
-
                         val bm = getPlaceholderBitmap(
                             photo.thumbnail.width,
                             photo.thumbnail.height,
-                            photo.blurHash,
+//                            photo.blurHash,
+                            null,
                             android.graphics.Color.parseColor(photo.color)
                         )
-
-                        println("tadyy: bm = $bm")
-                        println("tadyy: bm w = ${bm.width}")
-                        println("tadyy: bm h = ${bm.height}")
 
                         Image(
                             bitmap = bm.asImageBitmap(),
@@ -118,9 +96,7 @@ private fun getPlaceholderBitmap(width: Int, height: Int, blurHash: BlurHashVo?,
     val placeholderBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
 
     return blurHash?.let {
-        BlurHashDecoder.decode(it.hash, it.width, it.height)?.let {
-            placeholderBitmap.scale(width, height)
-        }
+        BlurHashDecoder.decode(it.hash, it.width, it.height)?.scale(width, height)
     } ?: run {
         placeholderBitmap.applyCanvas {
             drawColor(color)
