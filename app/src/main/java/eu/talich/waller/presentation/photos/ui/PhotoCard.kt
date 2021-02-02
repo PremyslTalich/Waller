@@ -93,12 +93,10 @@ fun PhotoCard(photo: PhotoVo, onClick: (photo: PhotoVo) -> Unit) {
 }
 
 private fun getPlaceholderBitmap(width: Int, height: Int, blurHash: BlurHashVo?, color: Int): Bitmap {
-    val placeholderBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-
     return blurHash?.let {
         BlurHashDecoder.decode(it.hash, it.width, it.height)?.scale(width, height)
     } ?: run {
-        placeholderBitmap.applyCanvas {
+        Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888).applyCanvas {
             drawColor(color)
         }
     }
