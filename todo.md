@@ -8,6 +8,10 @@
 - Gradle to kotlin
 
 # Done
+- Added Firebase
+    - Analytics
+    - Crashlytics
+    - Performance monitoring
 - Add clickable tags on photo detail info card, so user can easily search by tags on photo
 - Loading HQ photo on photo detail (maybe use a blurhash?)
 - Photos refactored to compose
