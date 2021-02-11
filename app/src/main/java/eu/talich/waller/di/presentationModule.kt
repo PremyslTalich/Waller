@@ -15,6 +15,7 @@ import eu.talich.waller.presentation.main.vm.MainViewModel
 import eu.talich.waller.presentation.photodetail.vm.PhotoDetailViewModel
 import eu.talich.waller.presentation.photos.PhotosFragment
 import eu.talich.waller.presentation.photos.vm.PhotosViewModel
+import eu.talich.waller.presentation.search.vm.SearchViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -34,6 +35,7 @@ val presentationModule = module {
             get()
         )
     }
+    viewModel { SearchViewModel(get(), get()) }
     viewModel { (photo: PhotoVo) -> PhotoDetailViewModel(get(), get(), get(), photo) }
 //    viewModel { (clearAdapter: ClearAdapter) -> PhotosViewModel(get(), get(), get(), get(), get(), clearAdapter) }
     viewModel { PhotosViewModel(get(), get(), get(), get(), get()) }

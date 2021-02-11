@@ -48,11 +48,21 @@ fun PhotoDetailCard(
         }
 
         Row(modifier = Modifier.padding(top = 24.dp)) {
-            Image(vectorResource(id = R.drawable.ic_calendar))
+            Image(
+                imageVector = vectorResource(id = R.drawable.ic_calendar),
+                contentDescription = null
+            )
             Text(text = createdAt.toPrettyString(), fontSize = TextUnit.Sp(14), color = defaultGray, fontStyle = FontStyle.Italic)
             Spacer(modifier = Modifier.weight(1f))
             Text(text = likes.toString(), fontStyle = FontStyle.Italic)
-            Image(vectorResource(id = R.drawable.ic_heart), modifier = Modifier.padding(start = 5.dp).scale(0.75f).align(Alignment.CenterVertically))
+            Image(
+                imageVector = vectorResource(id = R.drawable.ic_heart),
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(start = 5.dp)
+                    .scale(0.75f)
+                    .align(Alignment.CenterVertically)
+            )
         }
 
         PhotoDetailCardLocation(context, location, onLocationClick)
@@ -93,7 +103,13 @@ fun PhotoDetailCardLocation(context: Context, location: PhotoLocation, onLocatio
 
     if (address != null || gpsLocation != null) {
         Row(modifier = Modifier.clickable(onClick = { onLocationClick(location) }).fillMaxWidth()) {
-            Image(vectorResource(id = R.drawable.ic_globe), modifier = Modifier.width(20.dp).padding(start = 4.dp, top = 3.dp))
+            Image(
+                imageVector = vectorResource(id = R.drawable.ic_globe),
+                contentDescription = null,
+                modifier = Modifier
+                    .width(20.dp)
+                    .padding(start = 4.dp, top = 3.dp)
+            )
 
             Column {
                 (address ?: gpsLocation)?.let {

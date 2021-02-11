@@ -11,6 +11,9 @@
         android:label="fragment_main"
         tools:layout="@layout/fragment_main" >
 
+        <action android:id="@+id/action_mainFragment_to_searchDialogFragment"
+            app:destination="@id/searchDialogFragment" />
+
         <action android:id="@+id/action_mainFragment_to_collectionDetailFragment"
             app:destination="@id/collectionDetailFragment" />
 
@@ -44,4 +47,13 @@
         <action android:id="@+id/action_photoDetailFragment_to_mainFragment"
             app:popUpTo="@id/mainFragment" />
     </fragment>
+
+    <dialog
+        android:id="@+id/searchDialogFragment"
+        android:name="eu.talich.waller.presentation.search.SearchDialogFragment"
+        android:label="SearchDialogFragment" >
+
+<!--        <action android:id="@+id/action_searchDialogFragment_to_mainFragment"-->
+<!--            app:popUpTo="@id/mainFragment" />-->
+    </dialog>
 </navigation>

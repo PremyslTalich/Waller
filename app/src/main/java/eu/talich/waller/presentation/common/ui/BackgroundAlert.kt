@@ -32,7 +32,8 @@ fun BackgroundAlert(
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Image(
-            vectorResource(vectorImageResId),
+            imageVector = vectorResource(vectorImageResId),
+            contentDescription = null,
             contentScale = ContentScale.FillHeight,
             colorFilter = ColorFilter.tint(defaultGray),
             modifier = Modifier

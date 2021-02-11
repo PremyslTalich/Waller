@@ -11,6 +11,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import eu.talich.waller.R
 import eu.talich.waller.databinding.FragmentMainBinding
@@ -50,27 +51,29 @@ class MainFragment : Fragment(R.layout.fragment_main), KoinComponent {
     }
 
     private fun showSearchDialog() {
-        var searchQuery: EditText? = null
-        val view = layoutInflater.inflate(R.layout.dialog_search, null).apply {
-            searchQuery = findViewById<EditText>(R.id.searchQuery).apply {
-                inputType = InputType.TYPE_CLASS_TEXT
-                viewModel.searchQuery?.let {
-                    setText(it)
-                }
-                requestFocus()
-            }
-            findViewById<ImageButton>(R.id.clearButton).setOnClickListener {
-                searchQuery?.setText("")
-            }
-        }
+        findNavController().navigate(R.id.action_mainFragment_to_searchDialogFragment)
 
-        AlertDialog.Builder(requireActivity())
-            .setView(view)
-            .setOnDismissListener {
-                viewModel.setNewSearchQuery(searchQuery?.text.toString())
-            }
-            .show().apply {
-                window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            }
+//        var searchQuery: EditText? = null
+//        val view = layoutInflater.inflate(R.layout.dialog_search, null).apply {
+//            searchQuery = findViewById<EditText>(R.id.searchQuery).apply {
+//                inputType = InputType.TYPE_CLASS_TEXT
+//                viewModel.searchQuery?.let {
+//                    setText(it)
+//                }
+//                requestFocus()
+//            }
+//            findViewById<ImageButton>(R.id.clearButton).setOnClickListener {
+//                searchQuery?.setText("")
+//            }
+//        }
+//
+//        AlertDialog.Builder(requireActivity())
+//            .setView(view)
+//            .setOnDismissListener {
+//                viewModel.setNewSearchQuery(searchQuery?.text.toString())
+//            }
+//            .show().apply {
+//                window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//            }
     }
 }

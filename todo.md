@@ -8,6 +8,7 @@
 - Gradle to kotlin
 
 # Done
+- Search as Composable DialogFragment
 - Added Firebase
     - Analytics
     - Crashlytics

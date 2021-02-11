@@ -47,6 +47,7 @@ fun PhotoCard(photo: PhotoVo, onClick: (photo: PhotoVo) -> Unit) {
             ) {
                 CoilImage(
                     data = photo.thumbnail.url,
+                    contentDescription = null,
                     contentScale = ContentScale.FillWidth,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -62,6 +63,7 @@ fun PhotoCard(photo: PhotoVo, onClick: (photo: PhotoVo) -> Unit) {
 
                         Image(
                             bitmap = bm.asImageBitmap(),
+                            contentDescription = null,
                             contentScale = ContentScale.FillWidth,
                             modifier = Modifier
                                 .fillMaxWidth()

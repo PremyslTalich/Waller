@@ -6,14 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Surface
 import androidx.compose.runtime.onActive
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import eu.talich.waller.R
 import eu.talich.waller.presentation.common.TabbedFragment
+import eu.talich.waller.presentation.common.model.PhotoVo
 import eu.talich.waller.presentation.common.ui.AlertRibbon
 import eu.talich.waller.presentation.common.ui.BackgroundAlert
 import eu.talich.waller.presentation.common.ui.LoadingBar
@@ -39,11 +43,14 @@ class PhotosFragment : Fragment(), TabbedFragment {
                 val loadingState = viewModel.loadingState.value
                 val alertState = viewModel.alertState.value
 
+                val lazyListState: LazyListState = rememberLazyListState()
+
                 ConstraintLayout(modifier = Modifier.fillMaxSize()) {
                     val (photosContainer, backgroundAlert, ribbonAlert) = createRefs()
 
                     if (photos.isNotEmpty()) {
                         LazyColumn(
+                            state = lazyListState,
                             modifier = Modifier
                                 .fillMaxSize()
                                 .constrainAs(photosContainer) {
@@ -54,16 +61,11 @@ class PhotosFragment : Fragment(), TabbedFragment {
                                 }
                         ) {
                             itemsIndexed(photos) { index, photo ->
-                                PhotoCard(photo) {
-                                    findNavController().navigate(
-                                        MainFragmentDirections
-                                            .actionMainFragmentToPhotoDetailFragment(it)
-                                    )
-                                }
+                                PhotoCard(photo, ::onPhotoCardClick)
 
                                 if (index == photosLastIndex && !loadingState) {
                                     onActive {
-                                        viewModel.loadMorePhotos()
+                                        loadMorePhotos()
                                     }
                                 }
                             }
@@ -120,5 +122,16 @@ class PhotosFragment : Fragment(), TabbedFragment {
                 }
             }
         }
+    }
+
+    private fun loadMorePhotos() {
+        viewModel.loadMorePhotos()
+    }
+
+    private fun onPhotoCardClick(photo: PhotoVo) {
+        findNavController().navigate(
+            MainFragmentDirections
+                .actionMainFragmentToPhotoDetailFragment(photo)
+        )
     }
 }
