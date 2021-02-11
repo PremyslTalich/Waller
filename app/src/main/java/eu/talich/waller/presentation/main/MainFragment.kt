@@ -52,28 +52,5 @@ class MainFragment : Fragment(R.layout.fragment_main), KoinComponent {
 
     private fun showSearchDialog() {
         findNavController().navigate(R.id.action_mainFragment_to_searchDialogFragment)
-
-//        var searchQuery: EditText? = null
-//        val view = layoutInflater.inflate(R.layout.dialog_search, null).apply {
-//            searchQuery = findViewById<EditText>(R.id.searchQuery).apply {
-//                inputType = InputType.TYPE_CLASS_TEXT
-//                viewModel.searchQuery?.let {
-//                    setText(it)
-//                }
-//                requestFocus()
-//            }
-//            findViewById<ImageButton>(R.id.clearButton).setOnClickListener {
-//                searchQuery?.setText("")
-//            }
-//        }
-//
-//        AlertDialog.Builder(requireActivity())
-//            .setView(view)
-//            .setOnDismissListener {
-//                viewModel.setNewSearchQuery(searchQuery?.text.toString())
-//            }
-//            .show().apply {
-//                window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-//            }
     }
 }
