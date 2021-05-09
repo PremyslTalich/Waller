@@ -1,0 +1,5 @@
+<resources>
+    <string name="not_available">N/A</string>
+    <string name="bad_unsplash_connection">Unable to connect to UnSplash.com</string>
+    <string name="no_internet">No internet connection</string>
+</resources>

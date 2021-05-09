@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:name=".WallerApplication"
+        android:name=".system.WallerApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -22,7 +22,7 @@
             android:name="firebase_performance_logcat_enabled"
             android:value="true" />
 
-        <activity android:name="eu.talich.waller.presentation.main.MainActivity">
+        <activity android:name="eu.talich.waller.system.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="1.7">
+    <bytecodeTargetLevel target="1.8">
       <module name="data" target="1.7" />
       <module name="domain" target="1.7" />
       <module name="Waller.app" target="11" />
+      <module name="Waller.common.ui" target="11" />
+      <module name="Waller.feature.collection-detail" target="11" />
+      <module name="Waller.feature.collections" target="11" />
+      <module name="Waller.feature.main" target="11" />
+      <module name="Waller.feature.photo-detail" target="11" />
+      <module name="Waller.feature.photos" target="11" />
+      <module name="Waller.feature.search" target="11" />
       <module name="Waller.infrastructure" target="11" />
+      <module name="Waller.library.internet-observer" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -1,13 +1,10 @@
 package eu.talich.waller.presentation.common.mapper
 
 import eu.talich.domain.model.Photo
-import eu.talich.domain.model.mapper.Mapper
-import eu.talich.waller.presentation.common.model.BlurHashVo
+import eu.talich.waller.library.mapper.model.Mapper
 import eu.talich.waller.presentation.common.model.PhotoVo
-import eu.talich.waller.presentation.common.model.ThumbnailVo
-import kotlin.math.roundToInt
 
-class PhotoMapper: Mapper<Photo, PhotoVo> {
+class PhotoMapper: eu.talich.waller.library.mapper.model.Mapper<Photo, PhotoVo> {
     override fun map(from: Photo): PhotoVo {
         val ratio = from.height.toDouble() / from.width
 

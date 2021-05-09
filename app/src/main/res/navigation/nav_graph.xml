@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="eu.talich.waller.presentation.main.MainFragment"
+        android:name="eu.talich.waller.feature.main.MainFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_main" >
 
@@ -29,7 +29,7 @@
         tools:layout="@layout/fragment_collection_detail" >
         <argument
             android:name="collection"
-            app:argType="eu.talich.waller.presentation.common.model.CollectionVo" />
+            app:argType="eu.talich.waller.feature.collections.model.CollectionVo" />
 
         <action android:id="@+id/action_collectionDetailFragment_to_photoDetailFragment"
             app:destination="@id/photoDetailFragment" />
@@ -37,12 +37,12 @@
 
     <fragment
         android:id="@+id/photoDetailFragment"
-        android:name="eu.talich.waller.presentation.photodetail.PhotoDetailFragment"
+        android:name="eu.talich.waller.feature.photodetail.system.PhotoDetailFragment"
         android:label="PhotoDetailFragment"
         tools:layout="@layout/fragment_photo_detail" >
         <argument
             android:name="photo"
-            app:argType="eu.talich.waller.presentation.common.model.PhotoVo" />
+            app:argType="eu.talich.waller.common.navigation.model.WallerRouterDestinations.PhotoDetail" />
 
         <action android:id="@+id/action_photoDetailFragment_to_mainFragment"
             app:popUpTo="@id/mainFragment" />
@@ -50,7 +50,7 @@
 
     <dialog
         android:id="@+id/searchDialogFragment"
-        android:name="eu.talich.waller.presentation.search.SearchDialogFragment"
+        android:name="eu.talich.waller.feature.search.system.SearchDialogFragment"
         android:label="SearchDialogFragment" >
 
 <!--        <action android:id="@+id/action_searchDialogFragment_to_mainFragment"-->

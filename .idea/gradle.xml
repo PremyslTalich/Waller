@@ -13,9 +13,28 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/common" />
+            <option value="$PROJECT_DIR$/common/collection" />
+            <option value="$PROJECT_DIR$/common/navigation" />
+            <option value="$PROJECT_DIR$/common/photo" />
+            <option value="$PROJECT_DIR$/common/ui" />
+            <option value="$PROJECT_DIR$/common/user" />
             <option value="$PROJECT_DIR$/data" />
             <option value="$PROJECT_DIR$/domain" />
+            <option value="$PROJECT_DIR$/feature" />
+            <option value="$PROJECT_DIR$/feature/collection-detail" />
+            <option value="$PROJECT_DIR$/feature/collections" />
+            <option value="$PROJECT_DIR$/feature/main" />
+            <option value="$PROJECT_DIR$/feature/photo-detail" />
+            <option value="$PROJECT_DIR$/feature/photos" />
+            <option value="$PROJECT_DIR$/feature/search" />
             <option value="$PROJECT_DIR$/infrastructure" />
+            <option value="$PROJECT_DIR$/library" />
+            <option value="$PROJECT_DIR$/library/internet-observer" />
+            <option value="$PROJECT_DIR$/library/mapper" />
+            <option value="$PROJECT_DIR$/library/navigation" />
+            <option value="$PROJECT_DIR$/library/search" />
+            <option value="$PROJECT_DIR$/library/unsplash" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

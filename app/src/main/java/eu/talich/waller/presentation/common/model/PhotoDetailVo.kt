@@ -1,9 +1,9 @@
 package eu.talich.waller.presentation.common.model
 
-import eu.talich.domain.model.PhotoExif
-import eu.talich.domain.model.PhotoLocation
-import eu.talich.domain.model.PhotoUrls
-import eu.talich.domain.model.User
+import eu.talich.waller.common.photo.model.PhotoExif
+import eu.talich.waller.common.photo.model.PhotoLocation
+import eu.talich.waller.common.photo.model.PhotoUrls
+import eu.talich.waller.common.user.model.User
 import java.io.Serializable
 import java.util.*
 
@@ -17,9 +17,9 @@ data class PhotoDetailVo(
     val color: String,
     val downloads: Int,
     val likes: Int,
-    val exif: PhotoExif,
-    val location: PhotoLocation,
+    val exif: eu.talich.waller.common.photo.model.PhotoExif,
+    val location: eu.talich.waller.common.photo.model.PhotoLocation,
     val tags: List<String>,
-    val user: User,
-    val urls: PhotoUrls?
+    val user: eu.talich.waller.common.user.model.User,
+    val urls: eu.talich.waller.common.photo.model.PhotoUrls?
 ) : Serializable
