@@ -4,10 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.Color as AndroidColor
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
@@ -25,6 +22,7 @@ import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.scale
 import com.wolt.blurhashkt.BlurHashDecoder
 import com.google.accompanist.coil.rememberCoilPainter
+import com.google.accompanist.imageloading.ImageLoadState
 import eu.talich.waller.feature.photos.model.BlurHashVo
 import eu.talich.waller.feature.photos.model.PhotoVo
 
@@ -46,37 +44,37 @@ fun PhotoCard(photo: PhotoVo, onClick: (photo: PhotoVo) -> Unit) {
                         onClick(photo)
                     })
             ) {
-                Image(
-                    painter = rememberCoilPainter(photo.thumbnail.url),
-                    contentDescription = null,
-                )
+                val painter = rememberCoilPainter(photo.thumbnail.url)
 
-//                CoilImage(
-//                    data = photo.thumbnail.url,
-//                    contentDescription = null,
-//                    contentScale = ContentScale.FillWidth,
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .wrapContentHeight(),
-//                    loading = {
-//                        val bm = getPlaceholderBitmap(
-//                            photo.thumbnail.width,
-//                            photo.thumbnail.height,
-////                            photo.blurHash,
-//                            null,
-//                            AndroidColor.parseColor(photo.color)
-//                        )
-//
-//                        Image(
-//                            bitmap = bm.asImageBitmap(),
-//                            contentDescription = null,
-//                            contentScale = ContentScale.FillWidth,
-//                            modifier = Modifier
-//                                .fillMaxWidth()
-//                                .wrapContentHeight()
-//                        )
-//                    }
-//                )
+                Box {
+                    Image(
+                        painter = painter,
+                        contentDescription = null,
+                        contentScale = ContentScale.FillWidth,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight()
+                    )
+
+                    if (painter.loadState is ImageLoadState.Loading) {
+                        val bm = getPlaceholderBitmap(
+                            photo.thumbnail.width,
+                            photo.thumbnail.height,
+//                            photo.blurHash,
+                            null,
+                            AndroidColor.parseColor(photo.color)
+                        )
+
+                        Image(
+                            bitmap = bm.asImageBitmap(),
+                            contentDescription = null,
+                            contentScale = ContentScale.FillWidth,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentHeight()
+                        )
+                    }
+                }
 
                 if (!photo.description.isNullOrBlank()) {
                     Text(

@@ -123,7 +123,7 @@ object Coil {
 }
 
 object Accompanist {
-    private const val version = "0.13.0.compose-7443455-SNAPSHOT"
+    private const val version = "0.14.0-SNAPSHOT"
 
     const val accompanist = "com.google.accompanist:accompanist-coil:$version"
 }

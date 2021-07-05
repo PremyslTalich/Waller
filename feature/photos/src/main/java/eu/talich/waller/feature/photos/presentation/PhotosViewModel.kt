@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import eu.talich.waller.common.navigation.model.PhotoDetail
-import eu.talich.waller.common.navigation.model.WallerRouterDestinations
 import eu.talich.waller.feature.photos.model.PhotoVo
 import eu.talich.waller.library.internetobserver.domain.ObserveInternetConnectionUseCase
 import eu.talich.waller.library.navigation.domain.NavigateUseCase
@@ -16,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @ExperimentalCoroutinesApi
 class PhotosViewModel(
@@ -25,10 +25,7 @@ class PhotosViewModel(
     private val observeInternetConnectionUseCase: ObserveInternetConnectionUseCase,
     private val navigateUseCase: NavigateUseCase
 ): ViewModel() {
-
-    val loadingState: MutableState<Boolean> = mutableStateOf(false)
-    val photos: MutableState<List<PhotoVo>> = mutableStateOf(emptyList())
-    val alertState: MutableState<AlertState> = mutableStateOf(None)
+    val viewState: MutableState<PhotosViewState> = mutableStateOf(PhotosViewState())
 
     private var page: Int = 1
     private var searchQuery: String? = null
@@ -40,22 +37,36 @@ class PhotosViewModel(
             observeSearchQueryUseCase().collect {
                 page = 1
                 searchQuery = it
-                photos.value = emptyList()
+
+                withContext(Dispatchers.Main) {
+                    viewState.value = viewState.value.copy(
+                        photos = emptyList()
+                    )
+                }
+
                 loadMorePhotos()
             }
+        }
 
+        viewModelScope.launch(Dispatchers.IO) {
             observeInternetConnectionUseCase().collect { hasInternetConnection ->
-                if (hasInternetConnection) {
-                    alertState.value = None
-                } else {
-                    alertState.value = NoInternet
+                withContext(Dispatchers.Main) {
+                    viewState.value = viewState.value.copy(
+                        alert = if (!hasInternetConnection) {
+                            PhotosViewState.AlertState.NO_INTERNET
+                        } else {
+                            null
+                        }
+                    )
                 }
             }
         }
     }
 
     fun loadMorePhotos() {
-        loadingState.value = true
+        viewState.value = viewState.value.copy(
+            loading = true
+        )
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -70,23 +81,34 @@ class PhotosViewModel(
                 }
 
                 if (newPhotos.isNotEmpty()) {
-                    photos.value += newPhotos
+                    viewState.value = viewState.value.copy(
+                        photos = viewState.value.photos + newPhotos
+                    )
                     page++
-                    alertState.value = None
+
+                    viewState.value = viewState.value.copy(
+                        alert = null
+                    )
                 } else {
                     if (searchQuery != null && page == 1) {
-                        alertState.value = EmptySearch
+                        viewState.value = viewState.value.copy(
+                            alert = PhotosViewState.AlertState.EMPTY_SEARCH
+                        )
                     }
                 }
             } catch (e: Exception) {
                 println("Exception = $e")
 
-                if (alertState.value != NoInternet) {
-                    alertState.value = BadConnection
+                if (viewState.value.alert != PhotosViewState.AlertState.NO_INTERNET) {
+                    viewState.value = viewState.value.copy(
+                        alert = PhotosViewState.AlertState.BAD_CONNECTION
+                    )
                 }
             }
 
-            loadingState.value = false
+            viewState.value = viewState.value.copy(
+                loading = false
+            )
         }
     }
 
