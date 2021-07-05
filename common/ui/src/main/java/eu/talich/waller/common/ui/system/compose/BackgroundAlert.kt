@@ -11,8 +11,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -24,12 +25,12 @@ fun BackgroundAlert(
     vectorImageResId: Int,
     messageResId: Int
 ) {
-    val context = AmbientContext.current
+    val context = LocalContext.current
     val defaultGray = Color(55,55,55)
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Image(
-            imageVector = vectorResource(vectorImageResId),
+            imageVector = ImageVector.vectorResource(vectorImageResId),
             contentDescription = null,
             contentScale = ContentScale.FillHeight,
             colorFilter = ColorFilter.tint(defaultGray),

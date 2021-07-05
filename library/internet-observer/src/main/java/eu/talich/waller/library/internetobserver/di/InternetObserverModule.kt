@@ -12,7 +12,7 @@ import org.koin.dsl.module
 
 @ExperimentalCoroutinesApi
 @FlowPreview
-val internetObserverModule = module {
+val libraryInternetObserverModule = module {
     single<InternetConnectivityManager> { InternetConnectivityManagerImpl(androidContext()) }
     factory<InternetConnectionController> { InternetConnectionControllerImpl(get()) }
     factory { ObserveInternetConnectionUseCase(get()) }

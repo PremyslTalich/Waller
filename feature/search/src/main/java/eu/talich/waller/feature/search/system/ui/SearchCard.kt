@@ -15,12 +15,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import eu.talich.waller.R
+import eu.talich.waller.feature.search.R
 
 
 @Composable
@@ -36,37 +37,37 @@ fun SearchCard(
                     .padding(16.dp)
             ) {
                 Text(
-                    text = AmbientContext.current.getString(R.string.search_dialog_title),
+                    text = LocalContext.current.getString(R.string.search_dialog_title),
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.h5
                 )
 
-                TextField(
-                    value = searchQuery,
-                    onValueChange = {
-                        onSearchQueryChanged(it)
-                    },
-                    trailingIcon = {
-                        Image(
-                            imageVector = vectorResource(id = R.drawable.ic_clear),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .background(
-                                    Color.Transparent,
-                                    CircleShape
-                                )
-                                .clip(CircleShape)
-                                .size(36.dp)
-                                .clickable {
-                                    onClearSearchQueryClick()
-                                }
-                        )
-                    },
-                    singleLine = true,
-                    backgroundColor = Color.Transparent,
-                    modifier = Modifier
-                        .padding(top = 10.dp)
-                )
+//                TextField(
+//                    value = searchQuery,
+//                    onValueChange = {
+//                        onSearchQueryChanged(it)
+//                    },
+//                    trailingIcon = {
+//                        Image(
+//                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_clear),
+//                            contentDescription = null,
+//                            modifier = Modifier
+//                                .background(
+//                                    Color.Transparent,
+//                                    CircleShape
+//                                )
+//                                .clip(CircleShape)
+//                                .size(36.dp)
+//                                .clickable {
+//                                    onClearSearchQueryClick()
+//                                }
+//                        )
+//                    },
+//                    singleLine = true,
+//                    backgroundColor = Color.Transparent,
+//                    modifier = Modifier
+//                        .padding(top = 10.dp)
+//                )
             }
         }
     }

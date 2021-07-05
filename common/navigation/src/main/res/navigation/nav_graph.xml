@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainFragment" >
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="eu.talich.waller.feature.main.system.MainFragment"
+        android:label="FragmentMain" >
+
+        <action android:id="@+id/action_mainFragment_to_searchDialogFragment"
+            app:destination="@id/searchDialogFragment" />
+
+        <action android:id="@+id/action_mainFragment_to_collectionDetailFragment"
+            app:destination="@id/collectionDetailFragment" />
+
+        <action android:id="@+id/action_main_to_photoDetail"
+            app:destination="@id/photoDetailFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/collectionDetailFragment"
+        android:name="eu.talich.waller.feature.collectiondetail.system.CollectionDetailFragment"
+        android:label="CollectionDetailFragment" >
+        <argument
+            android:name="collection"
+            app:argType= "eu.talich.waller.common.navigation.model.CollectionDetail" />
+
+        <action android:id="@+id/action_collectionDetail_to_photoDetail"
+            app:destination="@id/photoDetailFragment" />
+
+        <action android:id="@+id/action_collectionDetail_to_main"
+            app:popUpTo="@id/mainFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/photoDetailFragment"
+        android:name="eu.talich.waller.feature.photodetail.system.PhotoDetailFragment"
+        android:label="PhotoDetailFragment" >
+        <argument
+            android:name="photo"
+            app:argType="eu.talich.waller.common.navigation.model.PhotoDetail" />
+
+        <action android:id="@+id/action_photoDetail_to_main"
+            app:popUpTo="@id/mainFragment" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/searchDialogFragment"
+        android:name="eu.talich.waller.feature.search.system.SearchDialogFragment"
+        android:label="SearchDialogFragment" >
+    </dialog>
+</navigation>

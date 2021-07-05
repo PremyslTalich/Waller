@@ -2,13 +2,21 @@ package eu.talich.waller.feature.collections.presentation
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import eu.talich.waller.feature.collections.model.CollectionVo
+import eu.talich.waller.feature.collections.databinding.CollectionsItemCollectionBinding
 
 class CollectionsAdapter(
     private var collections: MutableList<CollectionVo>,
-    private val loadMoreCollections: () -> Unit
+    private val loadMoreCollections: () -> Unit,
+    private val openCollectionDetail: (
+        id: String,
+        title: String,
+        description: String,
+        coverPhotoId: String,
+        coverPhotoUrl: String,
+        coverPhotoThumbnailUrl: String,
+        coverPhotoColor: String,
+    ) -> Unit
 ): RecyclerView.Adapter<CollectionViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CollectionViewHolder {
         val binding = CollectionsItemCollectionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -21,8 +29,17 @@ class CollectionsAdapter(
         holder.bind(collection)
 
         holder.itemView.setOnClickListener {
-            val args = MainFragmentDirections.actionMainFragmentToCollectionDetailFragment(collection)
-            it.findNavController().navigate(args)
+            with(collection) {
+                openCollectionDetail(
+                    id,
+                    title,
+                    description,
+                    coverPhoto.id,
+                    coverPhoto.rawUrl,
+                    coverPhoto.thumbnailUrl,
+                    coverPhoto.color
+                )
+            }
         }
 
         if (position == itemCount - 1) {
@@ -39,7 +56,9 @@ class CollectionsAdapter(
     }
 
     fun removeCollections() {
+        val itemCount = itemCount
+
         collections.clear()
-        notifyDataSetChanged()
+        notifyItemRangeRemoved(0, itemCount)
     }
 }

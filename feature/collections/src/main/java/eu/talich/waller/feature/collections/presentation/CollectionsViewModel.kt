@@ -1,32 +1,28 @@
 package eu.talich.waller.feature.collections.presentation
 
 import androidx.lifecycle.ViewModel
-import eu.talich.waller.feature.collections.model.mapper.UnsplashCollectionMapper
+import androidx.lifecycle.viewModelScope
+import eu.talich.waller.common.navigation.model.CollectionDetail
+import eu.talich.waller.common.navigation.model.WallerRouterDestinations
 import eu.talich.waller.library.internetobserver.domain.ObserveInternetConnectionUseCase
+import eu.talich.waller.library.navigation.domain.NavigateUseCase
 import eu.talich.waller.library.search.domain.ObserveSearchQueryUseCase
 import eu.talich.waller.library.unsplash.domain.GetFeaturedCollectionsUseCase
 import eu.talich.waller.library.unsplash.domain.SearchCollectionsUseCase
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlin.coroutines.CoroutineContext
 
 class CollectionsViewModel(
     private val getFeaturedCollectionsUseCase: GetFeaturedCollectionsUseCase,
     private val searchCollectionsUseCase: SearchCollectionsUseCase,
-    private val unsplashCollectionMapper: UnsplashCollectionMapper,
     private val observeSearchQueryUseCase: ObserveSearchQueryUseCase,
     private val observeInternetConnectionUseCase: ObserveInternetConnectionUseCase,
+    private val navigateUseCase: NavigateUseCase,
     private val onCollectionsCleared: () -> Unit
-): ViewModel(), CoroutineScope {
-    private val job = SupervisorJob()
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.IO + job
-
+): ViewModel() {
     private val _collections = MutableStateFlow<List<CollectionVo>>(listOf())
     val collections: StateFlow<List<CollectionVo>> = _collections
 
@@ -42,8 +38,8 @@ class CollectionsViewModel(
     init {
         loadMoreCollections()
 
-        launch {
-            getSearchQueryUseCase().collect {
+        viewModelScope.launch {
+            observeSearchQueryUseCase().collect {
                 onCollectionsCleared()
 
                 page = 1
@@ -53,7 +49,7 @@ class CollectionsViewModel(
             }
         }
 
-        launch {
+        viewModelScope.launch {
             observeInternetConnectionUseCase().collect { hasInternetConnection ->
                 if (hasInternetConnection) {
                     _alertState.value = None
@@ -65,18 +61,18 @@ class CollectionsViewModel(
     }
 
     fun loadMoreCollections() {
-        launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             _loadingBarState.value = true
 
             try {
                 val newCollections =
                     searchQuery?.let {
-                        searchCollectionsUseCase(it, page).results.map { photo ->
-                            collectionMapper.map(photo)
+                        searchCollectionsUseCase(it, page).results.map { collection ->
+                            collection.toCollectionVo()
                         }
                     } ?: run {
-                        getFeaturedCollectionsUseCase(page).map {
-                            collectionMapper.map(it)
+                        getFeaturedCollectionsUseCase(page).map { collection ->
+                            collection.toCollectionVo()
                         }
                     }
 
@@ -96,8 +92,29 @@ class CollectionsViewModel(
         }
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        job.cancel()
+    fun navigateToCollectionDetail(
+        id: String,
+        title: String,
+        description: String,
+        coverPhotoId: String,
+        coverPhotoUrl: String,
+        coverPhotoThumbnailUrl: String,
+        coverPhotoColor: String
+    ) {
+        viewModelScope.launch {
+            navigateUseCase(
+                CollectionDetail(
+                    id,
+                    title,
+                    description,
+                    CollectionDetail.CoverPhoto(
+                        coverPhotoId,
+                        coverPhotoUrl,
+                        coverPhotoThumbnailUrl,
+                        coverPhotoColor
+                    )
+                )
+            )
+        }
     }
 }

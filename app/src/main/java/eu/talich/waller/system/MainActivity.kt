@@ -3,28 +3,28 @@ package eu.talich.waller.system
 import android.os.Bundle
 import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.Navigation.findNavController
 import eu.talich.waller.R
 import eu.talich.waller.databinding.ActivityMainBinding
-import eu.talich.waller.feature.main.vm.MainViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.component.KoinComponent
+import eu.talich.waller.device.WallerRouter
+import org.koin.android.ext.android.inject
 
-class MainActivity: AppCompatActivity(), KoinComponent {
+class MainActivity: AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-
-    private val viewModel by viewModel<eu.talich.waller.feature.main.vm.MainViewModel>()
+    private val wallerRouter: WallerRouter by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // Remove splash theme
         setTheme(R.style.AppTheme)
-
         super.onCreate(savedInstanceState)
 
         this.requestWindowFeature(Window.FEATURE_NO_TITLE)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        setContentView(binding.root)
 
+        wallerRouter.setNavController(
+            findNavController(this, R.id.nav_host)
+        )
     }
 }

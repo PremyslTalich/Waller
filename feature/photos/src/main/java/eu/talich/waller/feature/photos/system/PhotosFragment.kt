@@ -10,9 +10,10 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Surface
-import androidx.compose.runtime.onActive
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.fragment.app.Fragment
 import eu.talich.waller.common.ui.system.compose.AlertRibbon
 import eu.talich.waller.common.ui.system.compose.BackgroundAlert
@@ -65,7 +66,7 @@ class PhotosFragment : Fragment(), MainScreenPage {
                                 PhotoCard(photo, ::onPhotoCardClick)
 
                                 if (index == photosLastIndex && !loadingState) {
-                                    onActive {
+                                    LaunchedEffect(Unit) {
                                         loadMorePhotos()
                                     }
                                 }
@@ -83,7 +84,8 @@ class PhotosFragment : Fragment(), MainScreenPage {
                                     bottom.linkTo(parent.bottom)
                                     start.linkTo(parent.start)
                                     end.linkTo(parent.end)
-                                }) {
+                                }
+                            ) {
                                 BackgroundAlert(
                                     R.drawable.ic_search_off,
                                     R.string.no_photos_found
@@ -133,4 +135,3 @@ class PhotosFragment : Fragment(), MainScreenPage {
         viewModel.navigateToPhotoDetail(photo)
     }
 }
-

@@ -9,6 +9,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import eu.talich.waller.feature.collections.presentation.CollectionsAdapter
 import eu.talich.waller.feature.collections.presentation.BadConnection
@@ -20,6 +21,7 @@ import eu.talich.waller.common.ui.system.compose.AlertRibbon
 import eu.talich.waller.common.ui.system.compose.BackgroundAlert
 import eu.talich.waller.common.ui.system.compose.LoadingBar
 import eu.talich.waller.feature.collections.R
+import eu.talich.waller.feature.collections.databinding.FragmentCollectionsBinding
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.core.parameter.parametersOf
@@ -34,24 +36,22 @@ class CollectionsFragment : Fragment(R.layout.fragment_collections), MainScreenP
 
     private lateinit var binding: FragmentCollectionsBinding
     private val viewModel: CollectionsViewModel by viewModel {
-        parametersOf({
-            requireActivity().runOnUiThread {
-                collectionsAdapter.removeCollections()
-            }
-        })
+        parametersOf(this::clearCollections)
     }
 
-    private val collectionsAdapter = CollectionsAdapter(
-        mutableListOf(),
-        viewModel::loadMoreCollections
-    )
-
+    private lateinit var collectionsAdapter: CollectionsAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentCollectionsBinding.inflate(inflater, container, false)
         val view = binding.root
+
+        collectionsAdapter = CollectionsAdapter(
+            mutableListOf(),
+            viewModel::loadMoreCollections,
+            viewModel::navigateToCollectionDetail
+        )
 
         binding.collections.apply {
             layoutManager = LinearLayoutManager(view.context)
@@ -98,6 +98,12 @@ class CollectionsFragment : Fragment(R.layout.fragment_collections), MainScreenP
             viewModel.collections.collect { value ->
                 collectionsAdapter.addCollections(value)
             }
+        }
+    }
+
+    private fun clearCollections() {
+        requireActivity().runOnUiThread {
+            collectionsAdapter.removeCollections()
         }
     }
 }

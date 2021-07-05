@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.scale
 import com.wolt.blurhashkt.BlurHashDecoder
-import dev.chrisbanes.accompanist.coil.CoilImage
+import com.google.accompanist.coil.rememberCoilPainter
 import eu.talich.waller.feature.photos.model.BlurHashVo
 import eu.talich.waller.feature.photos.model.PhotoVo
 
@@ -46,32 +46,37 @@ fun PhotoCard(photo: PhotoVo, onClick: (photo: PhotoVo) -> Unit) {
                         onClick(photo)
                     })
             ) {
-                CoilImage(
-                    data = photo.thumbnail.url,
+                Image(
+                    painter = rememberCoilPainter(photo.thumbnail.url),
                     contentDescription = null,
-                    contentScale = ContentScale.FillWidth,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight(),
-                    loading = {
-                        val bm = getPlaceholderBitmap(
-                            photo.thumbnail.width,
-                            photo.thumbnail.height,
-//                            photo.blurHash,
-                            null,
-                            AndroidColor.parseColor(photo.color)
-                        )
-
-                        Image(
-                            bitmap = bm.asImageBitmap(),
-                            contentDescription = null,
-                            contentScale = ContentScale.FillWidth,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .wrapContentHeight()
-                        )
-                    }
                 )
+
+//                CoilImage(
+//                    data = photo.thumbnail.url,
+//                    contentDescription = null,
+//                    contentScale = ContentScale.FillWidth,
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .wrapContentHeight(),
+//                    loading = {
+//                        val bm = getPlaceholderBitmap(
+//                            photo.thumbnail.width,
+//                            photo.thumbnail.height,
+////                            photo.blurHash,
+//                            null,
+//                            AndroidColor.parseColor(photo.color)
+//                        )
+//
+//                        Image(
+//                            bitmap = bm.asImageBitmap(),
+//                            contentDescription = null,
+//                            contentScale = ContentScale.FillWidth,
+//                            modifier = Modifier
+//                                .fillMaxWidth()
+//                                .wrapContentHeight()
+//                        )
+//                    }
+//                )
 
                 if (!photo.description.isNullOrBlank()) {
                     Text(

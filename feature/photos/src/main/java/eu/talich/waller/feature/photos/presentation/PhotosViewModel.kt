@@ -4,9 +4,9 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import eu.talich.waller.common.navigation.model.PhotoDetail
 import eu.talich.waller.common.navigation.model.WallerRouterDestinations
 import eu.talich.waller.feature.photos.model.PhotoVo
-import eu.talich.waller.feature.photos.model.mapper.UnsplashPhotoMapper
 import eu.talich.waller.library.internetobserver.domain.ObserveInternetConnectionUseCase
 import eu.talich.waller.library.navigation.domain.NavigateUseCase
 import eu.talich.waller.library.search.domain.ObserveSearchQueryUseCase
@@ -23,7 +23,6 @@ class PhotosViewModel(
     private val searchPhotosUseCase: SearchPhotosUseCase,
     private val observeSearchQueryUseCase: ObserveSearchQueryUseCase,
     private val observeInternetConnectionUseCase: ObserveInternetConnectionUseCase,
-    private val unsplashPhotoMapper: UnsplashPhotoMapper,
     private val navigateUseCase: NavigateUseCase
 ): ViewModel() {
 
@@ -62,11 +61,11 @@ class PhotosViewModel(
             try {
                 val newPhotos = searchQuery?.let {
                     searchPhotosUseCase(it, page).results.map { photo ->
-                        unsplashPhotoMapper.map(photo)
+                        photo.toPhotoVo()
                     }
                 } ?: run {
-                    getPhotosUseCase(page).map {
-                        unsplashPhotoMapper.map(it)
+                    getPhotosUseCase(page).map { photo ->
+                        photo.toPhotoVo()
                     }
                 }
 
@@ -94,12 +93,12 @@ class PhotosViewModel(
     fun navigateToPhotoDetail(photo: PhotoVo) {
         viewModelScope.launch {
             navigateUseCase(
-                WallerRouterDestinations.PhotoDetail(
+                PhotoDetail(
                     photo.id,
                     photo.urlFull,
                     photo.color,
                     photo.blurHash?.let {
-                        WallerRouterDestinations.PhotoDetail.BlurHash(
+                        PhotoDetail.BlurHash(
                             it.hash,
                             it.width,
                             it.height

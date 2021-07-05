@@ -2,23 +2,33 @@ package eu.talich.waller.device
 
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
-import eu.talich.waller.common.navigation.model.WallerRouterDestinations
+import eu.talich.waller.R
+import eu.talich.waller.common.navigation.model.*
+import eu.talich.waller.feature.collectiondetail.system.CollectionDetailFragmentDirections
+import eu.talich.waller.feature.main.system.MainFragmentDirections
+import eu.talich.waller.feature.photodetail.system.PhotoDetailFragmentDirections
 import eu.talich.waller.library.navigation.model.Router
 import eu.talich.waller.library.navigation.model.RouterDestination
-import eu.talich.waller.R
 
-class WallerRouter(
-    private val navController: NavController
-) : Router {
+class WallerRouter : Router {
+    private lateinit var navController: NavController
+
+    fun setNavController(navController: NavController) {
+        this.navController = navController
+    }
+
     override fun onNewDestination(targetDestination: RouterDestination) {
         when (targetDestination) {
-            is WallerRouterDestinations.PhotoDetail ->
+            is Main ->
+                getMainAction()
+
+            is PhotoDetail ->
                 getPhotoDetailAction(targetDestination)
 
-            is WallerRouterDestinations.CollectionDetail ->
-                getCollectionDetailAction()
+            is CollectionDetail ->
+                getCollectionDetailAction(targetDestination)
 
-            is WallerRouterDestinations.Search ->
+            is Search ->
                 getSearchDialogAction()
 
             else -> null
@@ -27,26 +37,42 @@ class WallerRouter(
         }
     }
 
-    private fun getPhotoDetailAction(photo: WallerRouterDestinations.PhotoDetail): NavDirections? {
+    private fun getMainAction(): NavDirections? {
         return when (currentDestination()) {
-            R.id.mainFragment ->
-                MainFragmentDirections.actionMainFragmentToPhotoDetailFragment(photo)
+            R.id.photoDetailFragment ->
+                PhotoDetailFragmentDirections.actionPhotoDetailToMain()
+
+            R.id.collectionDetailFragment ->
+                CollectionDetailFragmentDirections.actionCollectionDetailToMain()
 
             else -> null
         }
     }
 
-    private fun getCollectionDetailAction(): NavDirections? {
+    private fun getPhotoDetailAction(photo: PhotoDetail): NavDirections? {
         return when (currentDestination()) {
-            R.id.mainFragment -> TODO()
-            R.id.collectionDetailFragment -> TODO()
+            R.id.mainFragment ->
+                MainFragmentDirections.actionMainToPhotoDetail(photo)
+
+            R.id.collectionDetailFragment ->
+                CollectionDetailFragmentDirections.actionCollectionDetailToPhotoDetail(photo)
+
+            else -> null
+        }
+    }
+
+    private fun getCollectionDetailAction(collection: CollectionDetail): NavDirections? {
+        return when (currentDestination()) {
+            R.id.mainFragment -> MainFragmentDirections.actionMainFragmentToCollectionDetailFragment(collection)
+
             else -> null
         }
     }
 
     private fun getSearchDialogAction(): NavDirections? {
         return when (currentDestination()) {
-            R.id.mainFragment -> TODO()
+            R.id.mainFragment -> MainFragmentDirections.actionMainFragmentToSearchDialogFragment()
+
             else -> null
         }
     }

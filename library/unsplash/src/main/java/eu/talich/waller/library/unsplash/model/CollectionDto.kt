@@ -9,5 +9,5 @@ data class CollectionDto (
     @Json(name="total_photos")
     val totalPhotos: Int,
     @Json(name="cover_photo")
-    val coverPhoto: PhotoDto?
+    val coverPhoto: PhotoDto
 )
