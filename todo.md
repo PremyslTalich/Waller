@@ -1,13 +1,14 @@
 # Todo
+- fix all the shit after migrating to the new arch, kotlin gradle, new compose etc.
 - Remember scroll position on Photos screen
-- Refactor architecture
 - Add Users and User detail screens
 - Add "no more photos/collections" message for the user (at the end of pagination)
 - Add auto open/close keyboard when opening/closing the search dialog
 - Add context menu on collection detail screen with options like "use this collection for autowaller etc."
-- Gradle to kotlin
 
 # Done
+- Gradle to kotlin
+- Refactor architecture
 - Search as Composable DialogFragment
 - Added Firebase
     - Analytics
