@@ -1,0 +1,63 @@
+package eu.talich.waller.system
+
+import android.app.Application
+import com.facebook.flipper.android.AndroidFlipperClient
+import com.facebook.flipper.android.utils.FlipperUtils
+import com.facebook.flipper.core.FlipperClient
+import com.facebook.flipper.plugins.inspector.DescriptorMapping
+import com.facebook.flipper.plugins.inspector.InspectorFlipperPlugin
+import com.facebook.flipper.plugins.network.NetworkFlipperPlugin
+import com.facebook.soloader.SoLoader
+import eu.talich.waller.BuildConfig
+import eu.talich.waller.di.appModule
+import eu.talich.waller.feature.collectiondetail.di.featureCollectionDetailModule
+import eu.talich.waller.feature.collections.di.featureCollectionsModule
+import eu.talich.waller.feature.main.di.featureMainModule
+import eu.talich.waller.feature.photodetail.di.featurePhotoDetailModule
+import eu.talich.waller.feature.photos.di.featurePhotosModule
+import eu.talich.waller.feature.search.di.featureSearchModule
+import eu.talich.waller.library.internetobserver.di.libraryInternetObserverModule
+import eu.talich.waller.library.navigation.di.libraryNavigationModule
+import eu.talich.waller.library.search.di.librarySearchModule
+import eu.talich.waller.library.unsplash.di.libraryUnsplashModule
+import kotlinx.coroutines.FlowPreview
+import org.koin.android.ext.android.inject
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
+
+@FlowPreview
+class WallerApplication : Application() {
+    private val networkFlipperPlugin: NetworkFlipperPlugin by inject()
+
+    override fun onCreate(){
+        super.onCreate()
+
+        startKoin {
+            androidContext(this@WallerApplication)
+            modules(
+                appModule,
+
+                libraryInternetObserverModule,
+                libraryNavigationModule,
+                librarySearchModule,
+                libraryUnsplashModule,
+
+                featureSearchModule,
+                featurePhotosModule,
+                featurePhotoDetailModule,
+                featureMainModule,
+                featureCollectionsModule,
+                featureCollectionDetailModule
+            )
+        }
+
+        SoLoader.init(this, false)
+
+        if (BuildConfig.DEBUG && FlipperUtils.shouldEnableFlipper(this)) {
+            val client: FlipperClient = AndroidFlipperClient.getInstance(this)
+            client.addPlugin(InspectorFlipperPlugin(this, DescriptorMapping.withDefaults()))
+            client.addPlugin(networkFlipperPlugin)
+            client.start()
+        }
+    }
+}

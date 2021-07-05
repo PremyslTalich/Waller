@@ -1,0 +1,11 @@
+<resources>
+    <string name="not_available">N/A</string>
+    <string name="no_internet">No internet connection</string>
+    <string name="no_photos_found">No photos found</string>
+    <string name="bad_unsplash_connection">Unable to connect to UnSplash.com</string>
+    <string name="photos_title">Photos</string>
+    <string name="photo_location_both">%1$s in %2$s</string>
+    <string name="search_dialog_title">Search</string>
+    <string name="collections_title">Collections</string>
+    <string name="no_collections_found">No collections found</string>
+</resources>
