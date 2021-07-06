@@ -1,8 +1,5 @@
 package eu.talich.waller.feature.photos.presentation
 
-import eu.talich.waller.feature.photos.model.BlurHashVo
-import eu.talich.waller.feature.photos.model.PhotoVo
-import eu.talich.waller.feature.photos.model.ThumbnailVo
 import eu.talich.waller.library.unsplash.model.PhotoDto
 import kotlin.math.roundToInt
 

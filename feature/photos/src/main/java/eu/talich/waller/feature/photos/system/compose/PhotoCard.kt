@@ -23,8 +23,8 @@ import androidx.core.graphics.scale
 import com.wolt.blurhashkt.BlurHashDecoder
 import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.imageloading.ImageLoadState
-import eu.talich.waller.feature.photos.model.BlurHashVo
-import eu.talich.waller.feature.photos.model.PhotoVo
+import eu.talich.waller.feature.photos.presentation.BlurHashVo
+import eu.talich.waller.feature.photos.presentation.PhotoVo
 
 @Composable
 fun PhotoCard(photo: PhotoVo, onClick: (photo: PhotoVo) -> Unit) {

@@ -1,4 +1,4 @@
-package eu.talich.waller.feature.photos.model
+package eu.talich.waller.feature.photos.presentation
 
 data class PhotoVo(
     val id: String,

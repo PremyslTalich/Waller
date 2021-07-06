@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import eu.talich.waller.common.navigation.model.PhotoDetail
-import eu.talich.waller.feature.photos.model.PhotoVo
 import eu.talich.waller.library.internetobserver.domain.ObserveInternetConnectionUseCase
 import eu.talich.waller.library.navigation.domain.NavigateUseCase
 import eu.talich.waller.library.search.domain.ObserveSearchQueryUseCase
