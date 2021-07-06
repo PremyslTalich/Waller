@@ -1,4 +1,6 @@
 # Todo
+- Add unit tests
+- Add arch unit tests
 - fix all the shit after migrating to the new arch, kotlin gradle, new compose etc.
 - Remember scroll position on Photos screen
 - Add Users and User detail screens

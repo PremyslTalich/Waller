@@ -18,6 +18,10 @@ class SearchRepositoryImpl : SearchRepository {
         }
     }
 
+    override fun getSearchQuery(): String? {
+        return searchQuery.valueOrNull
+    }
+
     override suspend fun observeSearchQuery(): Flow<String?> {
         return searchQuery.asFlow()
     }

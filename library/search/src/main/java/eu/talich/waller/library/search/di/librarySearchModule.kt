@@ -1,6 +1,7 @@
 package eu.talich.waller.library.search.di
 
 import eu.talich.waller.library.search.data.SearchRepositoryImpl
+import eu.talich.waller.library.search.domain.GetSearchQueryUseCase
 import eu.talich.waller.library.search.domain.ObserveSearchQueryUseCase
 import eu.talich.waller.library.search.domain.SearchRepository
 import eu.talich.waller.library.search.domain.SetSearchQueryUseCase
@@ -15,4 +16,5 @@ val librarySearchModule = module {
 
     factory { ObserveSearchQueryUseCase(get()) }
     factory { SetSearchQueryUseCase(get()) }
+    factory { GetSearchQueryUseCase(get()) }
 }

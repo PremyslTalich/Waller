@@ -21,12 +21,9 @@ class SearchDialogFragment : DialogFragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                val searchQuery = viewModel.searchQuery.value
-
                 SearchCard(
-                    searchQuery = searchQuery,
-                    onSearchQueryChanged = viewModel::onSearchQueryChanged,
-                    onClearSearchQueryClick = viewModel::clearSearchQuery
+                    initSearchQuery = viewModel.getInitSearchQuery(),
+                    onSearchQueryChanged = viewModel::onSearchQueryChanged
                 )
             }
         }
