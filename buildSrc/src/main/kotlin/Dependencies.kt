@@ -93,7 +93,7 @@ object Firebase {
 }
 
 object Flipper {
-    private const val version = "0.51.0"
+    private const val version = "0.104.0"
 
     const val flipper = "com.facebook.flipper:flipper:$version"
     const val networkPlugin = "com.facebook.flipper:flipper-network-plugin:$version"
@@ -123,9 +123,10 @@ object Coil {
 }
 
 object Accompanist {
-    private const val version = "0.14.0-SNAPSHOT"
+    private const val version = "0.15.0"
 
-    const val accompanist = "com.google.accompanist:accompanist-coil:$version"
+    const val coil = "com.google.accompanist:accompanist-coil:$version"
+    const val flowLayout = "com.google.accompanist:accompanist-flowlayout:$version"
 }
 
 object Glide {

@@ -9,9 +9,8 @@ import org.koin.dsl.module
 
 val featureCollectionsModule = module {
     viewModel {
-        (onCollectionsCleared: () -> Unit) -> CollectionsViewModel(
-            get(), get(), get(), get(), get(),
-            onCollectionsCleared
+        CollectionsViewModel(
+            get(), get(), get(), get(), get()
         )
     }
 

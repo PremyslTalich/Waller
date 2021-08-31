@@ -3,7 +3,6 @@ package eu.talich.waller.feature.collections.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import eu.talich.waller.common.navigation.model.CollectionDetail
-import eu.talich.waller.common.navigation.model.WallerRouterDestinations
 import eu.talich.waller.library.internetobserver.domain.ObserveInternetConnectionUseCase
 import eu.talich.waller.library.navigation.domain.NavigateUseCase
 import eu.talich.waller.library.search.domain.ObserveSearchQueryUseCase
@@ -14,23 +13,17 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class CollectionsViewModel(
     private val getFeaturedCollectionsUseCase: GetFeaturedCollectionsUseCase,
     private val searchCollectionsUseCase: SearchCollectionsUseCase,
     private val observeSearchQueryUseCase: ObserveSearchQueryUseCase,
     private val observeInternetConnectionUseCase: ObserveInternetConnectionUseCase,
-    private val navigateUseCase: NavigateUseCase,
-    private val onCollectionsCleared: () -> Unit
+    private val navigateUseCase: NavigateUseCase
 ): ViewModel() {
-    private val _collections = MutableStateFlow<List<CollectionVo>>(listOf())
-    val collections: StateFlow<List<CollectionVo>> = _collections
-
-    private val _alertState = MutableStateFlow<AlertState>(None)
-    val alertState: StateFlow<AlertState> = _alertState
-
-    private val _loadingBarState = MutableStateFlow<Boolean>(false)
-    val loadingBarState: StateFlow<Boolean> = _loadingBarState
+    private val _viewState = MutableStateFlow<CollectionsViewState>(CollectionsViewState())
+    val viewState: StateFlow<CollectionsViewState> = _viewState
 
     private var page: Int = 1
     private var searchQuery: String? = null
@@ -39,22 +32,32 @@ class CollectionsViewModel(
         loadMoreCollections()
 
         viewModelScope.launch {
-            observeSearchQueryUseCase().collect {
-                onCollectionsCleared()
+            observeSearchQueryUseCase().collect { newSearchQuery ->
+                newSearchQuery?.let {
+                    page = 1
+                    searchQuery = it
 
-                page = 1
-                searchQuery = it
-                _collections.value = emptyList()
-                loadMoreCollections()
+                    withContext(Dispatchers.Main) {
+                        _viewState.value = _viewState.value.copy(
+                            collections = emptyList()
+                        )
+                    }
+
+                    loadMoreCollections()
+                }
             }
         }
 
         viewModelScope.launch {
             observeInternetConnectionUseCase().collect { hasInternetConnection ->
-                if (hasInternetConnection) {
-                    _alertState.value = None
-                } else {
-                    _alertState.value = NoInternet
+                withContext(Dispatchers.Main) {
+                    _viewState.value = _viewState.value.copy(
+                        alert = if (!hasInternetConnection) {
+                            CollectionsViewState.AlertState.NO_INTERNET
+                        } else {
+                            null
+                        }
+                    )
                 }
             }
         }
@@ -62,7 +65,9 @@ class CollectionsViewModel(
 
     fun loadMoreCollections() {
         viewModelScope.launch(Dispatchers.IO) {
-            _loadingBarState.value = true
+            _viewState.value = _viewState.value.copy(
+                loading = true
+            )
 
             try {
                 val newCollections =
@@ -77,18 +82,29 @@ class CollectionsViewModel(
                     }
 
                 if (newCollections.isNotEmpty()) {
-                    _collections.value = newCollections
+                    _viewState.value = _viewState.value.copy(
+                        collections = _viewState.value.collections + newCollections
+                    )
+
                     page++
                 } else {
                     if (searchQuery != null && page == 1) {
-                        _alertState.value = EmptySearch
+                        _viewState.value = _viewState.value.copy(
+                            alert = CollectionsViewState.AlertState.EMPTY_SEARCH
+                        )
                     }
                 }
             } catch (e: Exception) {
-                _alertState.value = BadConnection
+                if (_viewState.value.alert != CollectionsViewState.AlertState.NO_INTERNET) {
+                    _viewState.value = _viewState.value.copy(
+                        alert = CollectionsViewState.AlertState.BAD_CONNECTION
+                    )
+                }
             }
 
-            _loadingBarState.value = false
+            _viewState.value = _viewState.value.copy(
+                loading = false
+            )
         }
     }
 

@@ -1,11 +1,12 @@
 package eu.talich.waller.plugin
 
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
 import com.android.build.gradle.LibraryExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.getByType
+import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
 
 class WallerAndroidModule : Plugin<Project> {
     override fun apply(project: Project) {
@@ -24,11 +25,11 @@ private fun Project.configurePlugins() {
 
 private fun Project.configureAndroid() {
     extensions.getByType<LibraryExtension>().run {
-        buildToolsVersion(AndroidSdk.buildToolsVersion)
-        compileSdkVersion(AndroidSdk.compileSdkVersion)
+        buildToolsVersion = AndroidSdk.buildToolsVersion
+        compileSdk = AndroidSdk.compileSdkVersion
 
         defaultConfig {
-            minSdkVersion(AndroidSdk.minSdkVersion)
+            minSdk = AndroidSdk.minSdkVersion
             targetSdk = AndroidSdk.targetSdkVersion
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         }
@@ -48,10 +49,8 @@ private fun Project.configureAndroid() {
             kotlinCompilerExtensionVersion = AndroidCompose.version
         }
 
-        tasks.withType(KotlinJvmCompile::class.java) {
+        tasks.withType(KotlinCompile::class.java) {
             kotlinOptions {
-                jvmTarget = JavaVersion.VERSION_1_8.toString()
-                useIR = true
                 freeCompilerArgs = listOf(
                     "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
                     "-Xuse-experimental=kotlinx.coroutines.InternalCoroutinesApi",
@@ -60,13 +59,27 @@ private fun Project.configureAndroid() {
             }
         }
 
+        tasks.withType(KotlinJvmCompile::class.java) {
+            kotlinOptions {
+                jvmTarget = JavaVersion.VERSION_1_8.toString()
+            }
+        }
+
         buildTypes {
             getByName("debug") {
+                sourceSets {
+                    getByName("debug").java.srcDirs("src/main/java", "src/debug/java")
+                }
+
                 isTestCoverageEnabled = false
                 isMinifyEnabled = false
             }
 
             getByName("release") {
+                sourceSets {
+                    getByName("release").java.srcDirs("src/main/java", "src/release/java")
+                }
+
                 isTestCoverageEnabled = false
                 isMinifyEnabled = false
 
@@ -135,7 +148,8 @@ private fun Project.configureDependencies() {
         add("implementation", Coil.coil)
 
         // Accompanist
-        add("implementation", Accompanist.accompanist)
+        add("implementation", Accompanist.coil)
+        add("implementation", Accompanist.flowLayout)
 
         // BlurHash
         add("implementation", BlurHash.blurHash)
@@ -147,6 +161,5 @@ private fun Project.configureDependencies() {
         add("debugImplementation", Flipper.flipper)
         add("debugImplementation", Flipper.networkPlugin)
         add("debugImplementation", Flipper.soloader)
-        add("releaseImplementation", Flipper.noop)
     }
 }

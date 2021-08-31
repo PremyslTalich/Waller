@@ -22,7 +22,7 @@ interface UnsplashApi {
         @Path("id") photoId: String
     ): PhotoDetailDto
 
-    @GET("/collections/featured")
+    @GET("/collections")
     suspend fun getFeaturedCollections(
         @Query("page") page: Int
     ): List<CollectionDto>

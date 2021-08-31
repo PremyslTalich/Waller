@@ -1,17 +1,14 @@
 package eu.talich.waller.library.unsplash.di
 
-import com.facebook.flipper.plugins.network.FlipperOkhttpInterceptor
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import eu.talich.waller.library.unsplash.data.CollectionRepositoryImpl
 import eu.talich.waller.library.unsplash.data.PhotoRepositoryImpl
-import eu.talich.waller.library.unsplash.data.api.AuthorizationInterceptor
 import eu.talich.waller.library.unsplash.data.api.UnsplashApi
 import eu.talich.waller.library.unsplash.domain.*
 import eu.talich.waller.library.unsplash.domain.repository.CollectionRepository
 import eu.talich.waller.library.unsplash.domain.repository.PhotoRepository
-import okhttp3.OkHttpClient
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -20,13 +17,6 @@ import java.util.*
 private const val UNSPLASH_BASE_URL = "https://api.unsplash.com"
 
 val libraryUnsplashModule = module {
-    factory {
-        OkHttpClient.Builder()
-            .addInterceptor(AuthorizationInterceptor())
-            .addNetworkInterceptor(FlipperOkhttpInterceptor(get()))
-            .build()
-    }
-
     single<UnsplashApi> {
         Retrofit.Builder()
             .baseUrl(UNSPLASH_BASE_URL)

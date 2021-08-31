@@ -31,14 +31,16 @@ class CollectionDetailFragment : Fragment(R.layout.fragment_collection_detail), 
     private val args: CollectionDetailFragmentArgs by navArgs()
     private val viewModel: CollectionDetailViewModel by viewModel { parametersOf(args.collection) }
 
-    private val photosAdapter = PhotosAdapter(
-        mutableListOf(),
-        viewModel::loadMoreCollectionPhotos,
-        viewModel::navigateToPhotoDetail
-    )
+    private lateinit var photosAdapter: PhotosAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        photosAdapter = PhotosAdapter(
+            mutableListOf(),
+            viewModel::loadMoreCollectionPhotos,
+            viewModel::navigateToPhotoDetail
+        )
 
         observeCollectionPhotos()
     }

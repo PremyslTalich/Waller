@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import eu.talich.waller.feature.collections.databinding.CollectionsItemCollectionBinding
 
 class CollectionsAdapter(
-    private var collections: MutableList<CollectionVo>,
+    private var collections: List<CollectionVo>,
     private val loadMoreCollections: () -> Unit,
     private val openCollectionDetail: (
         id: String,
@@ -49,16 +49,9 @@ class CollectionsAdapter(
 
     override fun getItemCount(): Int = collections.size
 
-    fun addCollections(newCollections: List<CollectionVo>) {
-        val startIndex = itemCount
-        collections.addAll(newCollections)
-        notifyItemRangeInserted(startIndex, newCollections.size)
-    }
+    fun setCollections(collections: List<CollectionVo>) {
+        this.collections = collections
 
-    fun removeCollections() {
-        val itemCount = itemCount
-
-        collections.clear()
-        notifyItemRangeRemoved(0, itemCount)
+        notifyDataSetChanged()
     }
 }

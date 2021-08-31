@@ -1,15 +1,32 @@
+import java.util.*
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
-//    id("com.google.firebase.firebase-perf")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.firebase-perf")
     id("com.google.firebase.crashlytics")
     id("androidx.navigation.safeargs.kotlin")
-    id("com.google.gms.google-services")
+}
+
+val properties = Properties().apply {
+    load(
+        project.rootProject.file("local.properties").inputStream()
+    )
 }
 
 android {
-    compileSdkVersion(AndroidSdk.compileSdkVersion)
-    buildToolsVersion(AndroidSdk.buildToolsVersion)
+    compileSdk = AndroidSdk.compileSdkVersion
+    buildToolsVersion = AndroidSdk.buildToolsVersion
+
+    signingConfigs {
+        create("release") {
+            keyAlias = properties.getProperty("keyAlias")
+            keyPassword = properties.getProperty("keyPassword")
+            storeFile = file("../waller.keystore")
+            storePassword = properties.getProperty("storePassword")
+        }
+    }
 
     defaultConfig {
         applicationId = "eu.talich.waller"
@@ -52,10 +69,24 @@ android {
     }
 
     buildTypes {
-        release {
-            isMinifyEnabled = false
+        getByName("debug") {
+            sourceSets {
+                getByName("debug").java.srcDirs("src/main/java", "src/debug/java")
+            }
 
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            isMinifyEnabled = false
+        }
+
+        getByName("release") {
+            sourceSets {
+                getByName("release").java.srcDirs("src/main/java", "src/release/java")
+            }
+
+            signingConfig = signingConfigs.getByName("release")
+
+            isMinifyEnabled = true
+            proguardFile(getDefaultProguardFile("proguard-android.txt"))
+            proguardFile(file("proguard-rules.pro"))
         }
     }
 }
@@ -92,7 +123,6 @@ dependencies {
     debugImplementation(Flipper.flipper)
     debugImplementation(Flipper.networkPlugin)
     debugImplementation(Flipper.soloader)
-    releaseImplementation(Flipper.noop)
 
     implementation(platform(Firebase.bom))
     implementation(Firebase.analytics)

@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -60,15 +62,16 @@ fun PhotoDetailCard(
 
         PhotoDetailCardLocation(context, photo.location, onLocationClick)
 
-//        if (photo.tags.isNotEmpty()) {
-//            ScrollableColumn(
-//                modifier = Modifier
-//                    .padding(top = 10.dp)
-//                    .heightIn(max = 60.dp)
-//            ) {
-//                TagRow(tags = photo.tags.map { Tag(it, it) }, onTagClick)
-//            }
-//        }
+        if (photo.tags.isNotEmpty()) {
+            Column(
+                modifier = Modifier
+                    .padding(top = 10.dp)
+                    .heightIn(max = 60.dp)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                TagRow(tags = photo.tags.map { Tag(it, it) }, onTagClick)
+            }
+        }
     }
 }
 
@@ -95,7 +98,9 @@ fun PhotoDetailCardLocation(context: Context, location: PhotoDetailVo.LocationVo
     }
 
     if (address != null || gpsLocation != null) {
-        Row(modifier = Modifier.clickable(onClick = { onLocationClick(location) }).fillMaxWidth()) {
+        Row(modifier = Modifier
+            .clickable(onClick = { onLocationClick(location) })
+            .fillMaxWidth()) {
             Image(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_globe),
                 contentDescription = null,

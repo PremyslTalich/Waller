@@ -5,25 +5,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.recyclerview.widget.LinearLayoutManager
-import eu.talich.waller.feature.collections.presentation.CollectionsAdapter
-import eu.talich.waller.feature.collections.presentation.BadConnection
-import eu.talich.waller.feature.collections.presentation.CollectionsViewModel
-import eu.talich.waller.feature.collections.presentation.EmptySearch
-import eu.talich.waller.feature.collections.presentation.NoInternet
 import eu.talich.waller.common.ui.system.MainScreenPage
 import eu.talich.waller.common.ui.system.compose.AlertRibbon
 import eu.talich.waller.common.ui.system.compose.BackgroundAlert
 import eu.talich.waller.common.ui.system.compose.LoadingBar
 import eu.talich.waller.feature.collections.R
 import eu.talich.waller.feature.collections.databinding.FragmentCollectionsBinding
+import eu.talich.waller.feature.collections.presentation.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.core.parameter.parametersOf
 
 class CollectionsFragment : Fragment(R.layout.fragment_collections), MainScreenPage {
@@ -35,9 +31,7 @@ class CollectionsFragment : Fragment(R.layout.fragment_collections), MainScreenP
         get() = 20
 
     private lateinit var binding: FragmentCollectionsBinding
-    private val viewModel: CollectionsViewModel by viewModel {
-        parametersOf(this::clearCollections)
-    }
+    private val viewModel by viewModel<CollectionsViewModel>()
 
     private lateinit var collectionsAdapter: CollectionsAdapter
     override fun onCreateView(
@@ -58,52 +52,41 @@ class CollectionsFragment : Fragment(R.layout.fragment_collections), MainScreenP
             adapter = collectionsAdapter
         }
 
-        binding.noCollectionsAlert.setContent {
-            val state by viewModel.alertState.collectAsState()
-
-            if (state == EmptySearch) {
-                MaterialTheme {
-                    BackgroundAlert(R.drawable.ic_search_off, R.string.no_collections_found)
-                }
-            }
-        }
-
-        binding.alertRibbon.setContent {
-            val state by viewModel.alertState.collectAsState()
-
-            MaterialTheme {
-                when(state) {
-                    is BadConnection -> AlertRibbon(getString(R.string.bad_unsplash_connection))
-                    is NoInternet -> AlertRibbon(getString(R.string.no_internet))
-                    else -> Unit
-                }
-            }
-        }
-
-        binding.loadingBar.setContent {
-            val state by viewModel.loadingBarState.collectAsState()
-
-            if (state) {
-                LoadingBar()
-            }
-        }
-
-        observeCollections()
+        observeViewState()
 
         return view
     }
 
-    private fun observeCollections() {
+    private fun observeViewState() {
         lifecycleScope.launch {
-            viewModel.collections.collect { value ->
-                collectionsAdapter.addCollections(value)
-            }
-        }
-    }
+            viewModel.viewState.collect { state ->
+                withContext(Dispatchers.Main) {
+                    collectionsAdapter.setCollections(state.collections)
 
-    private fun clearCollections() {
-        requireActivity().runOnUiThread {
-            collectionsAdapter.removeCollections()
+                    binding.noCollectionsAlert.setContent {
+                        if (state.alert == CollectionsViewState.AlertState.EMPTY_SEARCH) {
+                            MaterialTheme {
+                                BackgroundAlert(R.drawable.ic_search_off, R.string.no_collections_found)
+                            }
+                        }
+                    }
+
+                    binding.alertRibbon.setContent {
+                        MaterialTheme {
+                            when(state.alert) {
+                                CollectionsViewState.AlertState.BAD_CONNECTION -> AlertRibbon(getString(R.string.bad_unsplash_connection))
+                                CollectionsViewState.AlertState.NO_INTERNET -> AlertRibbon(getString(R.string.no_internet))
+                            }
+                        }
+                    }
+
+                    binding.loadingBar.setContent {
+                        if (state.loading) {
+                            LoadingBar()
+                        }
+                    }
+                }
+            }
         }
     }
 }

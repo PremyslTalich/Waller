@@ -12,8 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
 fun TagRow(
@@ -21,41 +22,41 @@ fun TagRow(
     onClick: (id: String) -> Unit
 ) {
     MaterialTheme {
-//        FlowRow(
-//            mainAxisSpacing = 5.dp,
-//            crossAxisSpacing = 3.dp
-//        ) {
-//            tags.forEach {
-//                Text(
-//                    text = it.text,
-//                    fontStyle = FontStyle.Italic,
-//                    fontSize = TextUnit.Sp(14),
-//                    color = Color.Black,
-//                    modifier = Modifier
-//                        .background(
-//                            Color(0,0,0, 7),
-//                            RoundedCornerShape(10.dp)
-//                        )
-//                        .border(
-//                            1.dp,
-//                            Color(0,0,0, 20),
-//                            RoundedCornerShape(10.dp)
-//                        )
-//                        .clip(
-//                            RoundedCornerShape(10.dp)
-//                        )
-//                        .clickable(onClick = {
-//                            onClick(it.id)
-//                        })
-//                        .padding(
-//                            top = 0.dp,
-//                            bottom = 3.dp,
-//                            start = 5.dp,
-//                            end = 5.dp
-//                        )
-//                )
-//            }
-//        }
+        FlowRow(
+            mainAxisSpacing = 5.dp,
+            crossAxisSpacing = 3.dp
+        ) {
+            tags.forEach {
+                Text(
+                    text = it.text,
+                    fontStyle = FontStyle.Italic,
+                    fontSize = 14.sp,
+                    color = Color.Black,
+                    modifier = Modifier
+                        .background(
+                            Color(0,0,0, 7),
+                            RoundedCornerShape(10.dp)
+                        )
+                        .border(
+                            1.dp,
+                            Color(0,0,0, 20),
+                            RoundedCornerShape(10.dp)
+                        )
+                        .clip(
+                            RoundedCornerShape(10.dp)
+                        )
+                        .clickable(onClick = {
+                            onClick(it.id)
+                        })
+                        .padding(
+                            top = 0.dp,
+                            bottom = 3.dp,
+                            start = 5.dp,
+                            end = 5.dp
+                        )
+                )
+            }
+        }
     }
 }
 

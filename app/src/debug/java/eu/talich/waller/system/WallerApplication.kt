@@ -19,6 +19,7 @@ import eu.talich.waller.feature.search.di.featureSearchModule
 import eu.talich.waller.library.internetobserver.di.libraryInternetObserverModule
 import eu.talich.waller.library.navigation.di.libraryNavigationModule
 import eu.talich.waller.library.search.di.librarySearchModule
+import eu.talich.waller.library.unsplash.di.libraryOkHttpModule
 import eu.talich.waller.library.unsplash.di.libraryUnsplashModule
 import kotlinx.coroutines.FlowPreview
 import org.koin.android.ext.android.inject
@@ -41,6 +42,7 @@ class WallerApplication : Application() {
                 libraryNavigationModule,
                 librarySearchModule,
                 libraryUnsplashModule,
+                libraryOkHttpModule,
 
                 featureSearchModule,
                 featurePhotosModule,
@@ -53,7 +55,7 @@ class WallerApplication : Application() {
 
         SoLoader.init(this, false)
 
-        if (BuildConfig.DEBUG && FlipperUtils.shouldEnableFlipper(this)) {
+        if (FlipperUtils.shouldEnableFlipper(this)) {
             val client: FlipperClient = AndroidFlipperClient.getInstance(this)
             client.addPlugin(InspectorFlipperPlugin(this, DescriptorMapping.withDefaults()))
             client.addPlugin(networkFlipperPlugin)
