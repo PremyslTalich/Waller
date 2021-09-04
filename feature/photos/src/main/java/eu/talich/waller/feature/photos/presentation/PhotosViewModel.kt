@@ -1,5 +1,6 @@
 package eu.talich.waller.feature.photos.presentation
 
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -28,6 +29,8 @@ class PhotosViewModel(
 
     private var page: Int = 1
     private var searchQuery: String? = null
+
+    var listState: LazyListState? = null
 
     init {
         loadMorePhotos()
@@ -128,5 +131,13 @@ class PhotosViewModel(
                 )
             )
         }
+    }
+
+    fun getListState(newListState: LazyListState): LazyListState {
+        if (listState == null) {
+            listState = newListState
+        }
+
+        return listState!!
     }
 }

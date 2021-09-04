@@ -10,7 +10,7 @@ fun CollectionDto.toCollectionVo(): CollectionVo {
         totalPhotos,
         CoverPhotoVo(
             id = coverPhoto.id,
-            thumbnailUrl = coverPhoto.urls.thumb,
+            thumbnailUrl = coverPhoto.urls.regular,
             rawUrl = coverPhoto.urls.raw,
             width = coverPhoto.width,
             height = coverPhoto.height,

@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Surface
@@ -44,11 +43,10 @@ class PhotosFragment : Fragment(), MainScreenPage {
                 val viewState = viewModel.viewState.value
                 val photosLastIndex = viewState.photos.lastIndex
 
-                val lazyListState: LazyListState = rememberLazyListState()
+                val lazyListState = viewModel.getListState(rememberLazyListState())
 
                 Box(
-                    modifier = Modifier
-                        .fillMaxSize()
+                    modifier = Modifier.fillMaxSize()
                 ) {
                     if (viewState.photos.isNotEmpty()) {
                         LazyColumn(
